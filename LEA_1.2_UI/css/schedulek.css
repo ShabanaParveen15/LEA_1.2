@@ -1,0 +1,123 @@
+﻿#page1{
+        position: absolute;
+    top: 182px;
+    padding: 5px;
+}
+#page2{
+        position: absolute;
+    top: 1780px;
+    padding: 5px;
+}
+#page3{
+        position: absolute;
+    top: 4976px;
+    padding: 5px;
+}
+
+.top-fields{
+    margin-right: 234px;
+    margin-top:49px;
+}
+.begin{
+    width: 158px;
+    
+}
+.end{
+        margin-left: 95px;
+    width: 174px;
+}
+.end2{
+    margin-left: 26px;
+    width: 68px;
+}
+.input1a{
+    width:161px;
+}
+.input1b{
+    width:161px;
+}
+.input1c{
+    width:161px;
+}
+.input2{
+    width:161px;
+}
+.input3{
+    width:161px;
+}
+.input4a{
+    width:161px;
+}
+.input4b{
+    width:161px;
+}
+.input5{
+    width:161px;
+    margin-top:-3px;
+     float: right;
+        clear: both;
+}
+.input6{
+    width:161px;
+    margin-top:4px;
+     float: right;
+        clear: both;
+}
+.input7{
+    width:161px;
+}
+.input8{
+    width:161px;
+}
+.input9{
+    width:161px;
+    margin-top:0px;
+     float: right;
+        clear: both;
+}
+.input10{
+    width:161px;
+}
+.common{
+    float: right;
+        clear: both;
+        margin-top:2px;        
+}
+.common1{
+    float: left;
+        clear: both;
+        height:19px;  
+        width: 200px;     
+}
+.common2{
+    /*float: right;*/
+        clear: both;
+        height:19px;  
+        width: 200px; 
+        margin-left:141px;    
+}
+.right-fields{
+margin-top: 50px;
+
+}
+.bottom-fields{
+    margin-top:512px;
+}
+.address1{
+
+}
+.leftbottomfields{
+    width:50%;
+ 
+}
+.rightbottomfields{
+    width: 63%;
+    float: right;
+    margin-top: -76px;
+}
+.btn2
+{
+    float: right;
+    margin-right: 387px;
+    margin-top: -699px;
+}

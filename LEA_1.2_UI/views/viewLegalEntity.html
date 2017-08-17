@@ -1,0 +1,513 @@
+<div ng-controller="ViewLegalEntityController" ng-init="init()">
+
+    <script type="text/ng-template" id="myPopoverTemplate.html">
+        <table id="popuptable">
+            <thead></thead>
+            <tbody>
+                <tr><td class="popuplabel text-right pad-top ">LE Name:</td><td class="text-left pad-top popupval"> {{Popover.title}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top ">LE Status:</td><td class="text-left pad-top popupval"> {{Popover.leStatus}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top">Type:</td><td class="popupval text-left pad-top"> {{Popover.leType}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top">Jurisdiction:</td><td class="popupval text-left pad-top"> {{Popover.leJurisdiction}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top">Date Incorporated:</td><td class="popupval text-left pad-top"> {{Popover.incorporatedDate}}</td></tr>
+            </tbody>
+        </table>
+
+    </script>
+
+    <div class="continer-padding-fistheader  view-background">
+
+        <div ng-if="legalentity.length==0" class="text-center">
+            <div class="hell">
+                <div class="dropdown pull-right">
+
+                    <div class="view-icon-hierarchytool"><img ng-click="openHierarchy()" src="../images/hierarchy.png" class="pad-right" /></div>
+                    <select class="input-block-level repeat-animation" ng-model="periodvalue" ng-change="changeData(periodvalue)" ng-options="obj.description for obj in periodData |orderBy: '-description'"></select>
+                </div>
+
+            </div>
+            <div class="nodisplay">
+                <span>NO DATA TO DISPLAY</span>
+            </div>
+        </div>
+        <div>
+            <div class="hell">
+                <div class="caption">
+                    <span class="font-color">
+                        Legal Entity : {{legalentity.le_name}}
+                    </span>
+                    <!--<div class="dropdown pull-right ">
+                        <div class="view-icon-edit"  ng-if="role" ><img ng-click="edit()" src="../images/edit.png" /></div>
+                        <div class="view-icon-hierarchytool"><img ng-click="openHierarchy()" ng-show="legalentity.displayHierarchy" src="../images/hierarchy.png" class="pad-right" /></div>
+                        <div class="view-icon-dropdown"><select class="input-block-level repeat-animation" ng-model="periodvalue" ng-change="changeData(periodvalue)" ng-options="obj.description for obj in periodData |orderBy: '-description'"></select></div>
+
+                    </div>-->
+                    <div class="dropdown pull-right col-md-3">
+                        <div class="dropdown pull-right" style="width: 140px;">
+                            <div class="input-group ">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-clock-o font-red"></i>
+                                </span>
+                                <select class="input-block-level repeat-animation form-control" ng-model="periodvalue" ng-change="changeData(periodvalue)" ng-options="obj.description for obj in periodData |orderBy: '-description'"></select>
+
+                            </div>
+                        </div>
+                        <div class="view-icon-hierarchytool pull-right" style="margin-top: 3px;"><img ng-click="openHierarchy()" ng-if="legalentity.displayHierarchy" src="../images/hierarchy.png" class="pad-right" /></div>
+
+                        <div class="view-icon-edit pull-right" style="margin-top: 3px;" ng-if="role"><img ng-click="edit()" src="../images/edit.png" /></div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class=" row portlet-body boder-table ">
+
+                <div class="table-toolbar boarder-box ">
+
+                    <div class="row">
+                        <div class="col-md-6 col-xs-6">
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <h4 class="font-color-sub">General Information</h4>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Legal Entity Name:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font ">{{legalentity.le_name}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Legal Entity Status:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font ">{{legalentity.le_status}}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Updated By:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{legalentity.updated_by}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Updated Date:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{legalentity.strupdated_dt}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right">Comments:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{legalentity.comments}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">FEIN Number:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <h4 class="font-color-sub">Entity Type</h4>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">GAAP Type:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font ">{{legalentity.gaap_type}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Legal Entity Type:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font ">{{legalentity.le_type}}</label>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <h4 class="font-color-sub">Primary Address</h4>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Address1:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font ">{{legalentity.address1}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Address2:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font ">{{legalentity.address2}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">City:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font ">{{legalentity.city}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">State:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font ">{{legalentity.state}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Postal Code:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font ">{{legalentity.zip}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Country:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+
+                                            <div style="float:left;margin-right:5px" class="flag flag-{{country_flag}}"></div>
+                                            <label class="control-label view-font "> {{legalentity.jurisdiction}}</label>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <!--<div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <h4 class="font-color-sub">New Fields</h4>
+                                    <hr>
+                                        <div class="row" ng-repeat="(key,value) in miscellaneous">
+                                            <div class="col-md-5 col-xs-5">
+                                                <label class="control-label pull-right ">{{key}}:</label>
+                                            </div>
+                                            <div class="col-md-7 col-xs-7 ">
+                                                <label class="control-label view-font"> {{value}} </label>
+                                            </div>
+
+                                    </div>
+                                </div>
+                            </div>-->
+
+                        </div>
+                        <div class="col-md-6 col-xs-6">
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <h4 class="font-color-sub">Jurisdiction</h4>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">State:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{legalentity.region_name}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Country:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <div style="float:left;margin-right:5px" class="flag flag-{{country_flag}}"></div>
+                                            <label class="control-label view-font">{{legalentity.jurisdiction}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Region:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{legalentity.region_name}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Registration info:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+
+                                            <label class="control-label view-font"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <h4 class="font-color-sub">Important Dates</h4>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Incorporated:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{legalentity.strincorporated_dt}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Aquisition:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+
+                                            <label class="control-label view-font">{{legalentity.stracquisition_dt}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Disposition:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{legalentity.strdisposition_dt}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Liquidated:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{legalentity.strliquidated_dt}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Merged Date:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{legalentity.strmerge_dt}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <h4 class="font-color-sub">Primary Contacts</h4>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Finance Leader:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{legalentity.finance_contact}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Regional Tax Manager:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+
+                                            <label class="control-label view-font">{{legalentity.regional_tax_manager}}</label>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <h4 class="font-color-sub">  Miscellaneous</h4>
+                            <hr>
+                            <div class="row">
+                                <!--<div class="col-md-6 col-xs-6">
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">SAP Co Code:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+
+                                            <label class="control-label view-font"></label>
+                                        </div>
+                                    </div>
+
+                                </div>-->
+                                <!--<div class="col-md-6 col-xs-6 ">
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">OneSource Co Code:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+
+                                            <label class="control-label view-font"></label>
+                                        </di
+                                    v>
+                                    </div>
+                                </div>-->
+
+                                <div class="col-md-6 col-xs-6 " ng-repeat="(key,value) in attrObj" ng-show="attributes[key]['IsActive']">
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">{{key}}:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+
+                                            <!--<label class="control-label view-font">{{true == value ? 'Yes': ''  || false == value ? 'No':  '' || false == value ? '': ''||}}</label>-->
+                                            <label ng-if="attributes[key]['FieldType'] == 'Toggle'" class="control-label view-font"> {{true == value ? 'Yes': ''  || false == value ? 'No':  '' || '' == value ? '': ''}} </label>
+                                              <label ng-if="attributes[key]['FieldType'] != 'Toggle'" class="control-label view-font"> {{value}} </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12">
+                            <h4 class="font-color-sub"></h4>
+                            <hr>
+                        </div>
+                    </div>
+
+
+                    <div class="row ">
+                        <div class="col-md-12 col-xs-12">
+                            <uib-tabset>
+
+                                <uib-tab heading="OWNERSHIP">
+
+                                    <div class="row ">
+                                        <div class="table-toolbar boarder-box ">
+                                            <div class="col-md-12 col-xs-12 ">
+                                                <div class="pull-right">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12 ">
+                                            <table id="dtOwnership" datatable dt-options="dtOwnership" dt-columns="dtColumnsOwnership" dt-instance="dtInstanceOwnership" class="table table-striped table-hover table-bordered full_width"></table>
+                                        </div>
+                                    </div>
+                                </uib-tab>
+                                <uib-tab heading="BUSINESS UNIT">
+
+                                    <div class="row">
+                                        <div class="table-toolbar boarder-box ">
+                                            <div class="col-md-12 col-xs-12 ">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12 ">
+                                            <table id="dtHFMUnit" datatable dt-options="dtHFMUnit" dt-columns="dtColumnsHFMUnit" dt-instance="dtInstanceHFMUnit" class="table table-striped table-hover table-bordered full_width"></table>
+                                        </div>
+                                    </div>
+                                </uib-tab>
+                                <uib-tab heading="FINANCE" disable="true">
+
+                                    <div class="row">
+                                        <div class="table-toolbar boarder-box ">
+                                            <div class="col-md-12 col-xs-12 ">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12 ">
+                                            <table id="dtHFMUnit" datatable dt-options="dtHFMUnit" dt-columns="dtColumnsHFMUnit" dt-instance="dtInstanceHFMUnit" class="table table-striped table-hover table-bordered full_width"></table>
+                                        </div>
+                                    </div>
+                                </uib-tab>
+                                <uib-tab heading="TAX" disable="true">
+
+                                    <div class="row">
+                                        <div class="table-toolbar boarder-box ">
+                                            <div class="col-md-12 col-xs-12 ">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12 ">
+                                            <table id="dtHFMUnit" datatable dt-options="dtHFMUnit" dt-columns="dtColumnsHFMUnit" dt-instance="dtInstanceHFMUnit" class="table table-striped table-hover table-bordered full_width"></table>
+                                        </div>
+                                    </div>
+                                </uib-tab>
+                                <uib-tab heading="COMPLIANCE" disable="true">
+
+                                    <div class="row">
+                                        <div class="table-toolbar boarder-box ">
+                                            <div class="col-md-12 col-xs-12 ">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12 ">
+                                            <table id="dtHFMUnit" datatable dt-options="dtHFMUnit" dt-columns="dtColumnsHFMUnit" dt-instance="dtInstanceHFMUnit" class="table table-striped table-hover table-bordered full_width"></table>
+                                        </div>
+                                    </div>
+                                </uib-tab>
+                                <uib-tab heading="DOCUMENTATION" disable="true">
+
+                                    <div class="row">
+                                        <div class="table-toolbar boarder-box ">
+                                            <div class="col-md-12 col-xs-12 ">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12 ">
+                                            <table id="dtHFMUnit" datatable dt-options="dtHFMUnit" dt-columns="dtColumnsHFMUnit" dt-instance="dtInstanceHFMUnit" class="table table-striped table-hover table-bordered full_width"></table>
+                                        </div>
+                                    </div>
+                                </uib-tab>
+                                <uib-tab heading="COLAB" disable="true">
+
+                                    <div class="row">
+                                        <div class="table-toolbar boarder-box ">
+                                            <div class="col-md-12 col-xs-12 ">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12 ">
+                                            <table id="dtHFMUnit" datatable dt-options="dtHFMUnit" dt-columns="dtColumnsHFMUnit" dt-instance="dtInstanceHFMUnit" class="table table-striped table-hover table-bordered full_width"></table>
+                                        </div>
+                                    </div>
+                                </uib-tab>
+
+
+                            </uib-tabset>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

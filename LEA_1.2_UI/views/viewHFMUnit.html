@@ -1,0 +1,277 @@
+
+
+
+<div ng-controller="ViewHFMUnitController" ng-init="init()">
+
+
+    <div class="continer-padding-fistheader  view-background">
+
+        <div ng-if="hfmunit.length==0" class="text-center">
+            <div class="hell">
+                <div class="dropdown pull-right">
+                 <select class="input-block-level repeat-animation" ng-model="periodvalue" ng-change="changeData(periodvalue)" ng-options="obj.description for obj in periodData |orderBy: '-description'"></select>
+                </div>
+            </div>
+            <div class="nodisplay">
+                <span>NO DATA TO DISPLAY</span>
+            </div>
+        </div>
+        <div>
+            <div class="hell">
+                <div class="caption">
+                    <span class="font-color">
+                         HFM Unit : {{hfmunit.hfm_label}}
+                    </span>
+                    <div class="dropdown pull-right col-md-3">
+                        <div class="dropdown pull-right" style="width: 140px;">
+                            <div class="input-group ">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-clock-o font-red"></i>
+                                </span>
+                                <select class="input-block-level repeat-animation form-control" ng-model="periodvalue" ng-change="changeData(periodvalue)" ng-options="obj.description for obj in periodData |orderBy: '-description'"></select>
+
+                            </div>
+                        </div>
+                        <!--<div class="view-icon-hierarchytool pull-right" style="    margin-top: 3px;"><img ng-click="openHierarchy()" ng-if="legalentity.displayHierarchy" src="../images/hierarchy.png" class="pad-right" /></div>-->
+
+                        <div class="view-icon-edit pull-right" style="    margin-top: 3px;" ng-if="role"><img ng-click="edit()" src="../images/edit.png" /></div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class=" row portlet-body boder-table ">
+
+                <div class="table-toolbar boarder-box ">
+                    <div class="row">
+                        <div class="col-md-6 col-xs-6">
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <h4 class="font-color">General Information</h4>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">HFM Unit:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font ">{{hfmunit.hfm_label}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Segment:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font ">{{hfmunit.segment}}</label>
+                                        </div>
+                                    </div>
+                                
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right">ERP:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{hfmunit.erp}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Updated By:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{hfmunit.updated_by}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Updated Date:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{hfmunit.strupdated_dt}}</label>
+                                        </div>
+                                    </div>
+                                        <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right">Comments:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{hfmunit.bu_comments}}</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <h4 class="font-color">Legal Entity Information</h4>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Legal Entity Name:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font ">{{leData.le_name}}</label>
+                                        </div>
+                                    </div>
+                                  <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Updated By:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{leData.updated_by}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Updated Date:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{leData.strupdated_dt}}</label>
+                                        </div>
+                                    </div>
+                                      <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right">Comments:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{leData.comments}}</label>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 col-xs-6">
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <h4 class="font-color">Jurisdiction</h4>
+                                    <hr>                                   
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Country:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <div style="float:left" class="flag flag-{{country_flag}}"></div>
+                                            <label class="control-label view-font"> {{hfmunit.jurisdiction}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Region:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{hfmunit.region_name}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <h4 class="font-color">Important Dates</h4>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Incorporated:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{hfmunit.strhfm_incorporated_dt}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Aquisition:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+
+                                            <label class="control-label view-font">{{hfmunit.strhfm_acquisition_dt}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Disposition:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{hfmunit.strhfm_disposition_dt}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Merged Date:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{hfmunit.strhfm_merge_dt}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <h4 class="font-color">Primary Contacts</h4>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Finance Leader:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+                                            <label class="control-label view-font">{{hfmunit.finance_contact}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <label class="control-label pull-right ">Regional Tax Manager:</label>
+                                        </div>
+                                        <div class="col-md-7 col-xs-7 ">
+
+                                            <label class="control-label view-font">{{hfmunit.Regional_Tax_Manager}}</label>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="row"><hr></div>
+
+                    <div class="row ">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="hell col-lg-12 col-md-12  col-xs-12 ">
+                                <div class="caption">
+                                    <span class="font-color">
+                                        WORKBOOK
+                                    </span>
+
+                                </div>
+                            </div>
+                            <div class="boder-table col-lg-12 col-md-12  col-xs-12 ">
+                                <div class="row ">
+                                    <div class="table-toolbar boarder-box ">
+                                        <div class="col-md-12 col-xs-12 ">
+                                            <div class="pull-right">
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-xs-12 ">
+                                        <table id="Table1" datatable dt-options="dtHFMWorkbook" dt-columns="dtColumnsHFMWorkbook" dt-instance="dtInstanceHFMWorkbook" class="table table-striped table-hover table-bordered"></table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

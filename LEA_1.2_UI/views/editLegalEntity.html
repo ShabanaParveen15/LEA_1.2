@@ -1,0 +1,719 @@
+<div ng-controller="EditLegalEntityController" ng-init="init()">
+    <script type="text/ng-template" id="myPopoverTemplate.html">
+        <table id="popuptable">
+            <thead></thead>
+            <tbody>
+                <tr><td class="popuplabel text-right pad-top ">LE Name:</td><td class="text-left pad-top popupval"> {{Popover.title}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top ">LE Status:</td><td class="text-left pad-top popupval"> {{Popover.leStatus}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top">Type:</td><td class="popupval text-left pad-top"> {{Popover.leType}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top">Jurisdiction:</td><td class="popupval text-left pad-top"> {{Popover.leJurisdiction}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top">Date Incorporated:</td><td class="popupval text-left pad-top"> {{Popover.incorporatedDate}}</td></tr>
+            </tbody>
+        </table>
+
+    </script>
+
+    <div class="continer-padding-fistheader  view-background">
+
+        <div class="hell">
+            <div class="caption">
+
+                <div class="row">
+                    <div class="col-md-9 ">
+                        <span class="font-color" ng-show="edit">
+                            EDIT LEGAL ENTITY : {{LE_Name}}
+                        </span>
+                        <span class="font-color" ng-hide="edit">
+                            NEW LEGAL ENTITY : {{LE_Name}}
+                        </span>
+                    </div>
+                    <div class="col-md-3">
+                        <!--<div class="dropdown pull-right ">
+                            <img ng-click="openHierarchy()" ng-show="displayHierarchy" src="../images/hierarchy.png" class="pad-right pad-botm" />
+                            <select class="input-block-level" ng-model="periodvalue"  ng-change="changeData(periodvalue)" ng-options="obj.description for obj in periodData|orderBy: '-description'"></select>
+                            <perioddropdown></perioddropdown>
+                        </div>-->
+                        <div class="dropdown pull-right">
+                            <div class="dropdown pull-right" style="width: 140px;">
+                                <div class="input-group ">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-clock-o font-red"></i>
+                                    </span>
+                                    <select class="input-block-level repeat-animation form-control" ng-model="periodvalue" ng-change="changeData(periodvalue)" ng-options="obj.description for obj in periodData |orderBy: '-description'"></select>
+
+                                </div>
+                            </div>
+                            <div class="view-icon-hierarchytool pull-right" style=" margin-top 3px;"><img ng-click="openHierarchy()" ng-if="legalentity.displayHierarchy" src="../images/hierarchy.png" class="pad-right" /></div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class=" row portlet-body boder-table ">
+
+
+            <div class="table-toolbar boarder-box ">
+
+
+                <div class="row">
+                    <div class="col-md-12 col-xs-12">
+                        <div class="alert alert-success alert-dismissible" role="alert" ng-show="succ">
+                            <button type="button" class="close" ng-click="closealert2()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4> {{leSuccess}}</h4>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-xs-12">
+                        <div class="alert alert-danger alert-dismissible" role="alert" ng-show="err">
+                            <button type="button" class="close" ng-click="closealert3()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4> {{errMessage}}</h4>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6 col-xs-6">
+
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12 ">
+                                <h4 class="font-color-sub">General Information</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Legal Entity Name:</label>
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-industry font-red"></i>
+                                            </span>
+
+                                            <input id="lename" name="lename" maxlength="100" class="form-control" type="text" value="" ng-model="LE_Name" placeholder="Enter LE Name..." required>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Legal Entity Status:</label>
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-stack-exchange font-red"></i>
+                                            </span>
+                                            <select class="form-control" id="leStatus" name="leStatus" ng-model="status" ng-options="obj.description for obj in leStatusData" required></select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right">Comments:</label>
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="pad-right">
+
+                                            <textarea class="form-control " rows="3" id="comments" name="comments" ng-model="comments" required></textarea>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right">FEIN Number:</label>
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-industry font-red"></i>
+                                            </span>
+
+                                            <input class="form-control" type="text" placeholder="Enter FEIN Number..." required>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                                <h4 class="font-color-sub">Entity Type</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">GAAP Type:</label>
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-tags font-red"></i>
+                                            </span>
+                                            <select class="form-control" id="gaapType" name="gaapType" ng-model="gaap" ng-options="obj.description for obj in GAAPTypeData" required></select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Legal Entity Type:</label>
+                                    </div>
+
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-gavel font-red"></i>
+                                            </span>
+                                            <select class="form-control" id="letype" name="letype" ng-model="letype" ng-options="obj.description for obj in leTypes" required></select>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                                <h4 class="font-color-sub">Primary Address</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Address1:</label>
+                                    </div>
+
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-map-marker font-red"></i>
+                                            </span>
+                                            <input id="address1" name="address1" class="form-control" type="text" value="" ng-model="Address" placeholder="Enter Address1..." required>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Address2:</label>
+                                    </div>
+
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-map-marker font-red"></i>
+                                            </span>
+                                            <input id="address2" name="address2" class="form-control" type="text" value="" ng-model="Address2" placeholder="Enter Address2..." required>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">City:</label>
+                                    </div>
+
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-puzzle-piece font-red"></i>
+                                            </span>
+                                            <input id="city" name="city" class="form-control" type="text" ng-model="City" value="" placeholder="Enter City..." required>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">State:</label>
+                                    </div>
+
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-location-arrow font-red"></i>
+                                            </span>
+                                            <input id="state" name="state" class="form-control" type="text" ng-model="State" value="" placeholder="Enter State..." required>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Postal Code:</label>
+                                    </div>
+
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-terminal font-red"></i>
+                                            </span>
+                                            <input id="postalCode" name="postalCode" class="form-control" type="text" ng-model="Postal_Code" value="" placeholder="Enter Postal Code..." required>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Country:</label>
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 form-group-new" ng-class="{ 'has-error' : myForm.Country.$invalid && !myForm.Country.$pristine }">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-globe font-red"></i>
+                                            </span>
+                                            <select class="form-control" id="Country" name="Country" ng-model="country" ng-options="obj.description for obj in countries" required></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 col-xs-6">
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                                <div class="bs-callout bs-callout-success">
+                                    <h4> </h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                                <h4 class="font-color-sub">Jurisdiction</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">State:</label>
+                                    </div>
+
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-location-arrow font-red"></i>
+                                            </span>
+                                            <input id="juris_state" name="juris_state" class="form-control" ng-model="State" type="text" value="" placeholder="Enter State..." required>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Country:</label>
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-globe font-red"></i>
+                                            </span>
+                                            <select class="form-control" id="juris" name="juris" ng-model="country" ng-options="obj.description for obj in countries" required></select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Region:</label>
+
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-globe font-red"></i>
+                                            </span>
+                                            <input id="Region" name="region" class="form-control" ng-model="Region" type="text" value="" placeholder="Enter Region..." required>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Registration info:</label>
+
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-globe font-red"></i>
+                                            </span>
+                                            <input class="form-control" type="text" placeholder="Enter Registration info..." required>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                                <h4 class="font-color-sub">Important Dates</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Incorporated:</label>
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 ">
+                                        <div class="input-group pad-right form-group-new">
+                                            <input id="Incorporated_Dt" name="Incorporated_Dt" type="Incorporated_Dt" class="form-control" ng-readonly="readonly" ng-model="strIncorporated_Dt" uib-datepicker-popup="{{format}}" is-open="isOpened1" min-date="minDate" init-date="null" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" show-weeks="false" show-button-bar="false" required />
+
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn " ng-click="isOpened1 = !isOpened1"><i class="fa fa-calendar font-red"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Acquisition:</label>
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 ">
+                                        <div class="input-group pad-right form-group-new">
+                                            <input id="Acquisition_Dt" name="Acquisition_Dt" type="Acquisition_Dt" class="form-control" ng-readonly="readonly" ng-model="strAcquisition_Dt" uib-datepicker-popup="{{format}}" is-open="isOpened2" min-date=" mindate" init-date="null" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" show-weeks="false" show-button-bar="false" required />
+
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn " ng-click="isOpened2 = !isOpened2"><i class="fa fa-calendar font-red"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top form-group-new">
+                                        <label class="control-label pull-right ">Disposition:</label>
+                                    </div>
+
+                                    <div class="col-md-7 col-xs-7 ">
+                                        <div class="input-group pad-right form-group-new">
+                                            <input class="form-control" id="Disposition_Dt" type="Disposition_Dt" name="Disposition_Dt" ng-readonly="readonly" ng-model="strDisposition_Dt" uib-datepicker-popup="{{format}}" is-open="isOpened3" min-date="minDate" init-date="null" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" show-weeks="false" show-button-bar="false" required />
+
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn " ng-click="isOpened3 = !isOpened3"><i class="fa fa-calendar font-red"></i></button>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top form-group-new">
+                                        <label class="control-label pull-right ">Liquidated:</label>
+                                    </div>
+
+                                    <div class="col-md-7 col-xs-7 ">
+                                        <div class="input-group pad-right form-group-new">
+                                            <input class="form-control" id="Liquidated_Dt" type="Liquidated_Dt" name="Liquidated_Dt" ng-readonly="readonly" ng-model="strLiquidated_Dt" uib-datepicker-popup="{{format}}" is-open="isOpened5" min-date="minDate" init-date="null" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" show-weeks="false" show-button-bar="false" required />
+
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn " ng-click="isOpened5 = !isOpened5"><i class="fa fa-calendar font-red"></i></button>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Merged:</label>
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 ">
+                                        <div class="input-group pad-right form-group-new">
+                                            <input class="form-control" id="Merge_Dt" name="Merge_Dt" type="Merge_Dt" ng-readonly="readonly" ng-model="strMerge_Dt" uib-datepicker-popup="{{format}}" is-open="isOpened4" min-date="minDate" init-date="null" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" show-weeks="false" show-button-bar="false" required />
+
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn " ng-click="isOpened4 = !isOpened4"><i class="fa fa-calendar font-red"></i></button>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                                <h4 class="font-color-sub">Primary Contacts</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Finance Leader:</label>
+                                    </div>
+
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-user font-red"></i>
+                                            </span>
+                                            <select class="form-control" id="fin_leader" name="fin_leader" ng-model="fl" ng-options="obj.user_name for obj in users1" required></select>
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">Regional Tax Manager:</label>
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-user font-red"></i>
+                                            </span>
+                                            <select class="form-control" id="regional_mgr" name="regional_mgr" ng-model="rtm" ng-options="obj.user_name for obj in users2" required></select>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-xs-12">
+                        <h4 class="font-color-sub">  Miscellaneous</h4>
+                        <hr>
+                        <div class="row">
+                            <!--<div class="col-md-6 col-xs-6">
+                                                            <div class="row">
+                                                                <div class="col-md-4 col-xs-4 pad-top">
+                                                                    <label class="control-label pull-right ">SAP Co Code:</label>
+                                                                </div>
+
+                                                                <div class="col-md-7 col-xs-7 form-group-new">
+                                                                    <div class="input-group pad-right">
+                                                                        <span class="input-group-addon">
+                                                                            <i class="fa fa-user font-red"></i>
+                                                                        </span>
+                                                                        <input type="text" class="form-control"  />
+                                                                    </div>
+
+                                                                </div>
+                            </div>
+                                                        </div>-->
+                            <!--<div class="col-md-6 col-xs-6 ">
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">OneSource Co Code:</label>
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-user font-red"></i>
+                                            </span>
+                                            <input type="text" class="form-control" />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>-->
+
+                            <div ng-repeat="(key,value) in attributes track by $index" class="col-md-6 col-xs-6 " ng-if="attributes[key]['IsActive']">
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-4 pad-top">
+                                        <label class="control-label pull-right ">{{key}}:</label>
+                                    </div>
+                                    <div class="col-md-7 col-xs-7 form-group-new">
+                                        <div class="input-group pad-right">
+                                            <span ng-if="attributes[key]['FieldType'] != 'Toggle'" class="input-group-addon">
+                                                <i class="fa fa-user font-red"></i>
+                                            </span>
+
+                                            <!-- -----Text----- -->
+                                            <input ng-if="attributes[key]['FieldType'] == 'Text'" type="text" ng-model="attrObj[key]" class="form-control" ng-value="attrObj[key]" />
+
+                                            <!-- -----Select----- -->
+                                            <select ng-if="attributes[key]['FieldType'] == 'DropDown'" class="form-control" ng-model="attrObj[key]">
+                                                <option ng-repeat="option in attributes[key]['Options']" ng-value="option">{{option}}</option>
+                                            </select>
+
+                                            <!-- -----Toggle----- -->
+                                            <!--<input ng-if="attributes[key]['FieldType'] == 'Toggle'" ng-true-value="'Yes'" ng-false-value="'No'" type="checkbox" id="switcher" name="my-checkbox" data-on-text="NO" data-off-text="YES">-->
+                                            <input ng-if="attributes[key]['FieldType'] == 'Toggle'" ng-model="attrObj[key]" ng-checked="attrObj[key]" type="checkbox" id="switcher" name="my-checkbox" data-on-text="YES" data-off-text="NO">
+                                            <!--<div ng-if="attributes[key]['FieldType'] == 'Toggle'" class="onoffswitch">
+
+                                                 <input ng-model="attrObj[key]" ng-true-value="'Yes'" ng-false-value="'No'" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+                                                <label class="onoffswitch-label" for="myonoffswitch">
+                                                    <span class="onoffswitch-inner"></span>
+                                                    <span class="onoffswitch-switch"></span>
+                                                </label>
+                                            </div>-->
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-11 col-xs-11 form-group pad-top ">
+                        <p>
+                            <button type="button" class="btn btn-primary pull-right margin-right btn-width" ng-click="add()" ng-hide="edit">ADD</button>
+                            <button type="button" class="btn btn-primary pull-right margin-right btn-width" ng-click="save()" ng-show="edit">SAVE</button>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 10px;"><hr></div>
+                <div class="row " ng-show="viewTabs">
+
+                    <div class="col-md-12 col-xs-12">
+                        <div class="alert alert-success alert-dismissible" role="alert" ng-show="suc">
+                            <button type="button" class="close" ng-click="closealert()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4> {{success}}</h4>
+                        </div>
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-danger alert-dismissible" role="alert" ng-show="er">
+                                <button type="button" class="close" ng-click="closealert4()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4> {{error}}</h4>
+                            </div>
+                            <uib-tabset>
+                                <uib-tab heading="OWNERSHIP">
+
+                                    <div class="row " ng-form="ownerForm">
+                                        <div class="table-toolbar boarder-box pad-row-top">
+                                            <div class="col-md-3 col-xs-3 form-group">
+                                                <label class="control-label owner pad-top"> Owner:</label>
+                                                <div class="input-group ">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-industry font-red"></i>
+                                                    </span>
+                                                    <input type="text" id="textOwner" name="textOwner" ng-model="HFMJSON" uib-typeahead="le as le.lE_Name for le in unmappedLEs | filter:$viewValue | limitTo:100" placeholder="Search..." class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1 col-xs-1 pad-top">
+                                                <label class="control-label pull-right "> Percentage:</label>
+                                            </div>
+                                            <div class="col-md-1 col-xs-1 form-group pad-zero">
+                                                <div class="input-group ">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-paperclip font-red"></i>
+                                                    </span>
+                                                    <input id="percentage" ng-model=" percentage" class="form-control" type="text" placeholder="%" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1 col-xs-1 pad-top">
+                                                <label class="control-label pull-right "> Effective Date:</label>
+                                            </div>
+                                            <div class="col-md-2 col-xs-2 form-group pad-zero">
+                                                <div class="input-group pad-right form-group-new">
+                                                    <input id="Effective_Dt" name="Effective_Dt" type="Effective_Dt" class="form-control" ng-readonly="readonly" ng-model="strEffective_Dt" uib-datepicker-popup="{{format}}" is-open="isOpened8" min-date="minDate" init-date="null" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" show-weeks="false" show-button-bar="false" required />
+
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn " ng-click="isOpened8 = !isOpened8"><i class="fa fa-calendar font-red"></i></button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1 col-xs-1 pad-top">
+                                                <label class="control-label pull-right "> Comments:</label>
+                                            </div>
+                                            <div class="col-md-2 col-xs-2 form-group pad-zero">
+                                                <div class="input-group ">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-comments font-red"></i>
+                                                    </span>
+
+                                                    <input id="comments_owner" name="comments_owner" class="form-control" ng-model="ownercomments.comment" type="text" placeholder="Enter Comments...">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1 col-xs-1 form-group">
+                                                <button id="ownerSave" type="button" class="btn btn-primary btn-width" ng-disabled="ownerForm.$invalid" ng-click="addDOwner(HFMJSON,percentage,ownercomments.comment,strEffective_Dt)">SAVE </button>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12 ">
+                                            <table id="dtOwnership" datatable dt-options="dtOwnership" dt-columns="dtColumnsOwnership" dt-instance="dtInstanceOwnership" class="table table-striped table-hover table-bordered full_width"></table>
+                                        </div>
+                                    </div>
+                                </uib-tab>
+                                <uib-tab heading="BUSINESS UNIT">
+
+                                    <div class="row" ng-form="hfmForm">
+                                        <div class="table-toolbar boarder-box  pad-row-top">
+                                            <div class="col-md-1 col-xs-1 pad-top">
+                                                <label class="control-label pull-right ">Business:</label>
+                                            </div>
+                                            <div class="col-md-3 col-xs-3 form-group pad-zero">
+                                                <div class="input-group ">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-industry font-red"></i>
+                                                    </span>
+
+                                                    <input type="text" ng-model="HFMjs" id="location" name="location" uib-typeahead="HFM as HFM.hfm_label  for HFM in unmappedHFMs | filter:$viewValue | limitTo:100" placeholder=" Search.." class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1 col-xs-1 pad-top">
+                                                <label class="control-label pull-right "> Effective Date:</label>
+                                            </div>
+                                            <div class="col-md-2 col-xs-2 form-group pad-zero">
+                                                <div class="input-group pad-right form-group-new">
+                                                    <input id="HFM_Effective_Dt" name="HFM_Effective_Dt" type="HFM_Effective_Dt" class="form-control" ng-readonly="readonly" ng-model="strhfmEffective_Dt" uib-datepicker-popup="{{format}}" is-open="isOpened9" min-date="minDate" init-date="null" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" show-weeks="false" show-button-bar="false" required />
+
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn " ng-click="isOpened9 = !isOpened9"><i class="fa fa-calendar font-red"></i></button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1 col-xs-1 pad-top">
+                                                <label class="control-label pull-right ">Comments:</label>
+                                            </div>
+                                            <div class="col-md-3 col-xs-3 form-group pad-zero">
+                                                <div class="input-group ">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-comments font-red"></i>
+                                                    </span>
+                                                    <input id="comments_bu" name="comments_bu" ng-model="BUcomments.comment" class="form-control" type="text" placeholder="Enter Comments...">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1 col-xs-1 form-group pad-left ">
+                                                <button type="button" class="btn btn-primary btn-width" ng-disabled="hfmForm.$invalid" ng-click="addHFM(HFMjs,BUcomments.comment,strhfmEffective_Dt)">SAVE</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12 ">
+                                            <table style="width:100%" id="dtHFMUnit" datatable dt-options="dtHFMUnit" dt-columns="dtColumnsHFMUnit" dt-instance="dtInstanceHFMUnit" class="table table-striped table-hover table-bordered full_width"></table>
+                                        </div>
+                                    </div>
+                                </uib-tab>
+
+                            </uib-tabset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

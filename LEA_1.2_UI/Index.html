@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+<!--[if IE 9 ]>   
+ <html xmlns="http://www.w3.org/1999/xhtml" ng-app="GLET" class="ie9">
+ <![endif]-->
+<!--[if !IE]>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="GLET" class="not-ie9">
+ <![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+    <link href="assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!--<link href="assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />-->
+    <link href="assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <!-- BEGIN DYMANICLY LOADED CSS FILES(all plugin and page related styles must be loaded between GLOBAL and THEME css files ) -->
+    <link rel="stylesheet" type="text/css" href="assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css" />
+    <link href="css/select.min.css" rel="stylesheet" />
+    <!-- END DYMANICLY LOADED CSS FILES -->
+    <link href="../css/GLET.css" rel="stylesheet" />
+    <link href="css/fixedcolum.css" rel="stylesheet" />
+    <!-- BEGIN THEME STYLES -->
+    <link href="assets/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
+    <link href="assets/global/css/plugins.css" rel="stylesheet" type="text/css" />
+    <link href="assets/global/plugins/animation/animations.css" rel="stylesheet" />
+    <link href="js/directives/ui-bootstrap-0.14.3-csp.css" rel="stylesheet" type="text/css" />
+    <link href="vendor/datatables-fixedcolumns/css/dataTables.fixedColumns.css" rel="stylesheet" />
+    <link href="css/primitives.latest.css" rel="stylesheet" />
+    <link href="css/flags.css" rel="stylesheet" />
+    <link href="css/panzoomwidget.css" rel="stylesheet" />
+    <link href="css/exportal-base.css" rel="stylesheet" />
+
+    <!--wijmo page styles-->
+    <link href="vendor/wijmo/styles/wijmo.min.css" rel="stylesheet" />
+    <link href="vendor/wijmo/styles/wijmo.theme.office.min.css" rel="stylesheet" />
+    <link href="vendor/wijmo/styles/ribbon.css" rel="stylesheet" />
+    <link href="vendor/wijmo/styles/cellStyles.css" rel="stylesheet" />
+    <link href="css/schedulek.css" rel="stylesheet" />
+
+    <!--[if IE 9 ]>
+<link href="css/HTIE9.css" rel="stylesheet" />
+             <![endif]-->
+
+    <!-- END THEME STYLES -->
+    <title>Legal Entity Anayltics</title>
+    
+</head>
+<!-- END HEAD -->
+<body class="bd_img" xmlns:ng="http://angularjs.org" id="ng-app" data-ng-app="GLET" ng-controller="MainController">
+   
+    <div class="loader-overlay" id="myloader">
+        <img src="images/loader.gif" />
+    </div>
+
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header" style="background-color:#888888;">
+            <span class="modal-title font-color-header"></span>
+            <span class="pull-right pointer" id="x" ng-click="cancel()">x</span>
+        </div>
+        <div class="modal-body  " ng-init="init()" ng-controller="PrimitiveController">
+            <div class="row pad-botm HT_Menu" id="hthead">
+                <img ng-click='zoomToFit()' class="icon-padding pull-right" title="zoom to fit" src="../images/root.png" style="cursor:pointer;height: 35px; width: 35px;" />
+                <img ng-click='print()' class="icon-padding pull-right" title="Print hierarchy" src="../images/print.png" style="cursor:pointer;height: 35px; width: 35px;" />
+                <img ng-click='ImageExport()' class="icon-padding pull-right" title="Export hierarchy" src="../images/exportimage.png" style="cursor:pointer;height: 35px; width: 35px;" />
+                <img ng-click='pdf()' class="icon-padding pull-right" title="Export Form 851" src="../images/pdf.png" style="cursor:pointer;height: 35px; width: 35px;" />
+                <img ng-click='downloadxml()' class="icon-padding pull-right" title="download xml of hierarchy" src="../images/xml.png" style="cursor:pointer;height: 35px; width: 35px;" />
+
+                <img ng-click='search()' class="pull-left" title="Search by LE" src="../images/alpha.png" style="cursor:pointer;height: 35px; width: 35px;" />
+                <input type="text" ng-model="LEName" uib-typeahead="le as le.lE_Name for le in LeDropdown | filter:$viewValue | limitTo:100" typeahead-on-select="newHierarchy(1)" id="searchtxt" class="form-control left-margin pull-left" />
+                <img ng-click="searchbyjuris()" class="icon-padding pull-left" title="Search by Jurisdiction" src="../images/location.png" style="cursor:pointer;height: 35px; width: 35px;" />
+                <select id="searchjuris" class="form-control left-margin pull-left" ng-model="jurisdiction" ng-change="newHierarchy(2)" ng-options="obj.jurisdiction for obj in jurisdictions |orderBy: 'Jurisdiction'"></select>
+
+                <img ng-click="searchbypercentage()" class="icon-padding pull-left" title="Filter by Percentage" src="../images/percentage.png" style="cursor:pointer;height: 35px; width: 35px;" />
+                <input type="number" max="999" ng-model="percentage" id="searchtxt2" class="form-control left-margin-percentage pull-left" />
+                <input type="button" value="Go" ng-click="newHierarchy()" id="searchtxt_btn" style="display: none;height: 34px;" />
+
+                <panzoomwidget class="z_widget" panzoom-id="PanZoom"></panzoomwidget>
+
+            </div>
+            <div style="position:relative;" id="scroller">
+                <panzoom id="PanZoom" config="panzoomConfig" model="panzoomModel" style="width:100%;height:450px;overflow:auto!important;cursor:default!important;" print-section>
+                    <div>
+                        <div bp-fam-diagram data-options="myOptions" data-on-highlight-changed="onMyHighlightChanged()" id="hierarchy" data-on-cursor-changed="onMyCursorChanged()">
+
+                        </div>
+                    </div>
+
+                </panzoom>
+            </div>
+
+        </div>
+    </script>
+    <!-- BEGIN HEADER -->
+    <div id="warrper">
+        <div class=" navbar navbar-fixed-top col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+            <div data-ng-include="'template/header.html'" ng-if="login">
+
+            </div>
+        </div>
+    </div>
+    <div id="contentcontainer" ng-class="{'continer-padding view-fixer  bottomDiv':login}">
+        <div ng-view class="slide-animation" autoscroll="true"></div>
+    </div>
+    <div id="footer" class=" navbar  navbar-inverse navbar-fixed-bottom">
+        <div data-ng-include="'template/footer.html'">
+        </div>
+    </div>
+    <!-- END CONTAINER -->
+    <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+    <!-- BEGIN CORE PLUGINS -->
+    <!--Sajid-->
+    <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+    <script src="assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+
+
+    <script src="vendor/angular.js"></script>
+    <!--Read excel files-->
+    <script src="vendor/excel-to-json/excel.js"></script>
+    <script src="vendor/excel-to-json/jszip.js"></script>
+    <script src="vendor/excel-to-json/grid.js"></script>
+    <!---->
+    <script src="assets/global/plugins/angularjsIdle/angular-idle.js"></script>
+    <script src="vendor/angular-datatables.js"></script>
+    <script src="vendor/jquery.dataTables.min.js"></script>
+    <script src="vendor/angular-datatables.bootstrap.js"></script>
+
+    <link href="vendor/datatables-buttons/css/buttons.dataTables.css" rel="stylesheet" />
+    <script src="vendor/dataTables.buttons.js"></script>
+    <script src="vendor/angular-datatables.buttons.js"></script>
+    <script src="vendor/datatables-buttons/js/buttons.bootstrap.js"></script>
+    <script src="vendor/datatables-buttons/js/buttons.jqueryui.js"></script>
+    <script src="vendor/datatables-buttons/js/buttons.colVis.js"></script>
+    <script src="vendor/datatables-buttons/js/buttons.flash.js"></script>
+    <script src="vendor/datatables-buttons/js/buttons.html5.js"></script>
+    <script src="vendor/datatables-buttons/js/buttons.print.js"></script>
+    <!--Sajid-->
+    <script src="assets/global/plugins/angularjs/angular-route.min.js"></script>
+    <script src="vendor/angular-datatables.fixedcolumns.min.js"></script>
+    <script src="assets/global/plugins/animation/angular-animate.js"></script>
+    <script src="js/directives/ui-bootstrap-0.14.3.min.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/angular-zoom-directive.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/angular-scroll.min.js"></script>
+    <script src="vendor/select.min.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/primitives.min.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/hamster.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/mousewheel.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/panzoom.min.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/PanZoomService.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/panzoomwidget.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/jquery.slimscroll.min.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/jquery.slimscrollHorizontal.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/html2canvas.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/rgbcolor.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/StackBlur.js"></script>
+    <script src="assets/global/plugins/hierarchy tools/canvg.min.js"></script>
+    <script src="assets/global/plugins/xml2json.min.js"></script>
+
+    <!-- Authorization Scripts-->
+    <script src="vendor/ecryption.js"></script>
+    <script src="vendor/sjcl.js"></script>
+
+
+    <!--wijmo files-->
+    <script src="vendor/wijmo/jszip.min.js"></script>
+
+    <script src="vendor/wijmo/wijmo.min.js"></script>
+    <script src="vendor/wijmo/wijmo.input.min.js"></script>
+    <script src="vendor/wijmo/wijmo.grid.min.js"></script>
+    <script src="vendor/wijmo/wijmo.grid.filter.min.js"></script>
+    <script src="vendor/wijmo/wijmo.grid.sheet.min.js"></script>
+    <script src="vendor/wijmo/wijmo.grid.sheet.filter.min.js"></script>
+    <script src="vendor/wijmo/wijmo.grid.xlsx.min.js"></script>
+    <script src="vendor/wijmo/wijmo.xlsx.min.js"></script>
+
+    <!-- Wijmo-Angular interop -->
+
+    <script src="vendor/wijmo/wijmo.angular.min.js"></script>
+
+
+    <script src="js/services/CurrentUserFactoryModule.js"></script>
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="js/app.js"></script>
+    <script src="js/directive.js"></script>
+    <script src="js/gloabalservices.js"></script>
+
+
+    <!--wijmo scripts-->
+    <script src="vendor/wijmo/dataService.js"></script>
+    <script src="vendor/wijmo/directives/appDctv.js"></script>
+
+
+    <!--<script src="js/controllers/MainController.js"></script>-->
+    <script src="js/services/AuthInterceptor.js"></script>
+    <script src="js/services/Authorization.js"></script>
+    <script src="js/controllers/LogInController.js"></script>
+    <script src="js/Controllers/dashboard.js"></script>
+    <script src="js/Controllers/exception.js"></script>
+    <script src="js/controllers/legalEntity.js"></script>
+    <script src="js/controllers/viewLegalEntity.js"></script>
+    <script src="js/controllers/editLegalEntity.js"></script>
+    <script src="js/controllers/HFMUnit.js"></script>
+    <script src="js/controllers/viewHFMUnit.js"></script>
+    <script src="js/controllers/editHFMUnit.js"></script>
+    <script src="js/controllers/hierarchy.js"></script>
+    <script src="js/controllers/taxWorkbook.js"></script>
+    <script src="js/controllers/timeline.js"></script>
+    <script src="js/controllers/Reports.js"></script>
+    <script src="js/controllers/administration.js"></script>
+    <script src="js/controllers/ChangePassword.js"></script>
+    <script src="js/controllers/editUser.js"></script>
+    <script src="js/controllers/TaxReturnCompliance.js"></script>
+    <script src="js/controllers/EditTaxReturnFormController.js"></script>
+    <script src="js/controllers/ScheduleKEditTaxReturnFormController.js"></script>
+
+    <script src="js/controllers/SchedulePController.js"></script>
+    <script src="js/controllers/VersionController.js"></script>
+    <script src="js/controllers/VersionReleaseController.js"></script>
+    <script src="js/controllers/VersionRelease1.1.js"></script>
+    <script src="js/controllers/VersionRelease1.1.0.1.js"></script>
+    <script src="js/controllers/VersionRelease1.1.0.2.js"></script>>
+
+
+    <![if lt IE 9]>
+    <script src="../../assets/global/plugins/respond.min.js"></script>
+    <script src="../../assets/global/plugins/excanvas.min.js"></script>
+    <!--[endif]-->
+    <script src="assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+
+    <script src="assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <script src="assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+    <script src="assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+    <script src="assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+    <script src="assets/global/plugins/sha256.js"></script>
+    <!-- END CORE PLUGINS -->
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+
+    <script type="text/javascript" src="assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+    <script src="vendor/datatables-fixedcolumns/js/dataTables.fixedColumns.js"></script>
+    <script src="vendor/angular-local-storage.min.js"></script>
+
+    <script type="text/ng-template" id="warning-dialog.html">
+        <div class="modal-header">
+            <h3>You're Idle. Do Something!</h3>
+        </div>
+        <div idle-countdown="countdown" ng-init="countdown=5" class="modal-body">
+            <progressbar max="5" value="5" animate="false" class="progress-striped active">You'll be logged out in {{countdown}} second(s).</progressbar>
+        </div>
+
+    </script>
+    <!-- END PAGE LEVEL PLUGINS -->
+
+
+</body>
+<!-- END BODY -->
+

@@ -1,0 +1,923 @@
+﻿<link href="vendor/wijmo/styles/app.css" rel="stylesheet" />
+<div ng-controller="EditTaxReturnFormController">
+    <div class="continer-padding-fistheader  view-background" id="tx">
+        <div class="hell">
+            <div class="caption">
+                <span class="font-color">
+                    FORM 1120 IC-DISC
+                </span>
+                
+            </div>
+
+        </div>
+       
+        <div class="row portlet-body boder-table">
+            <uib-tabset active="tabactive">
+                <uib-tab heading="Excel" disable="IsChanged" title="{{warning}}" ng-click="ShowExcel(1)" active="activeTab[1]">
+                    <!--<input type="button" class="btn btn-primary lg btn-e" ng-disabled="isAlwaysDisabled" ng-click="SavePdfToDB1()" style="width: 100px; border: 0px;background-color: #0f3c6d; " value="Save" />-->
+                    <div ng-show="true">
+                        <div class="row ribbon-container" style="box-shadow: 5px 3px 13px rgba(0, 0, 0, 0.4);">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="btn-group">
+                                        <div class="btn btn-default btn-large no-border">
+                                            <span class="glyphicon glyphicon-open"></span>
+                                            <span class="text">Load</span>
+                                            <input type="file" class="upload" id="loadingExcel"
+                                                   onchange="angular.element(this).scope().importExcel(this)"
+                                                   accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12" />
+                                        </div>
+                                        <button class="btn btn-default btn-large no-border" ng-click="exportExcel()">
+                                            <span class="glyphicon glyphicon-save"></span>
+                                            <span class="text">Save</span>
+                                        </button>
+                                        <div class="btn btn-default btn-large no-border" ng-click="newFile()">
+                                            <span class="glyphicon glyphicon-file"></span>
+                                            <span class="text">New</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer text-center">File</div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="btn-group btn-group-h">
+                                        <button type="button" class="btn btn-default btn-small" title="Undo" ng-disabled="!(ctx.undoStack && ctx.undoStack.canUndo)" ng-click="undo()">
+                                            <span class="glyphicon glyphicon-share-alt flip"></span>
+                                            <span class="text">Undo</span>
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-small" title="Redo" ng-disabled="!(ctx.undoStack && ctx.undoStack.canRedo)" ng-click="redo()">
+                                            <span class="glyphicon glyphicon-share-alt"></span>
+                                            <span class="text">Redo</span>
+                                        </button>
+                                    </div>
+                                    <!--<div class="btn-group">
+                            <button type="button" class="btn btn-default btn-large no-border">
+                                <span class="paste ribbon-icon"></span>
+                                <span class="text">Paste</span>
+                            </button>
+                            <div class="btn-group-vertical">
+                                <button type="button" class="btn btn-default btn-small no-border">
+                                    <span class="cut ribbon-icon"></span>
+                                    <span class="text">Cut</span>
+                                </button>
+                                <button type="button" class="btn btn-default btn-small no-border">
+                                    <span class="copy ribbon-icon"></span>
+                                    <span class="text">Copy</span>
+                                </button>
+                            </div>
+                        </div>-->
+                                    
+                                </div>
+                                <div class="panel-footer text-center">Undo / Redo</div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="btn-group-vertical">
+                                        <wj-combo-box style="width:120px"
+                                                      control="ctx.cboFontName"
+                                                      items-source="ctx.fonts"
+                                                      selected-index="10"
+                                                      display-member-path="name"
+                                                      selected-value-path="value"
+                                                      is-editable="false">
+                                        </wj-combo-box>
+                                        <wj-combo-box style="width:60px"
+                                                      control="ctx.cboFontSize"
+                                                      items-source="ctx.fontSizeList"
+                                                      selected-index="5"
+                                                      display-member-path="name"
+                                                      selected-value-path="value"
+                                                      is-editable="false">
+                                        </wj-combo-box>
+                                        <div class="btn-group btn-group-h">
+                                            <button type="button" class="btn btn-default btn-small {{ctx.selectionFormatState.isBold ? 'active' : ''}}" title="Bold" ng-click="applyBoldStyle()">
+                                                <span class="glyphicon glyphicon-bold"></span>
+                                                <span class="text">Bold</span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-small {{ctx.selectionFormatState.isItalic ? 'active' : ''}}" title="Italic" ng-click="applyItalicStyle()">
+                                                <span class="glyphicon glyphicon-italic"></span>
+                                                <span class="text">Italic</span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-small {{ctx.selectionFormatState.isUnderline ? 'active' : ''}}" title="Underline" ng-click="applyUnderlineStyle()">
+                                                <span class="underline ribbon-icon"></span>
+                                                <span class="text">Underline</span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-small" title="Fill Color" ng-click="showColorPicker($event, true)">
+                                                <span class="glyphicon glyphicon-text-background"></span>
+                                                <span class="text">Fill</span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-small" title="Font Color" ng-click="showColorPicker($event, false)">
+                                                <span class="glyphicon glyphicon-text-color"></span>
+                                                <span class="text">Font</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer text-center">Font</div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="btn-group-vertical">
+                                        <div class="btn-group btn-group-h">
+                                            <button type="button" class="btn btn-default btn-small {{ctx.selectionFormatState.textAlign === 'left' ? 'active' : ''}}" title="Left" ng-click="applyCellTextAlign('left')">
+                                                <span class="glyphicon glyphicon-align-left"></span>
+                                                <span class="text">Left</span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-small {{ctx.selectionFormatState.textAlign === 'center' ? 'active' : ''}}" title="Center" ng-click="applyCellTextAlign('center')">
+                                                <span class="glyphicon glyphicon-align-center"></span>
+                                                <span class="text">Center</span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-small {{ctx.selectionFormatState.textAlign === 'right' ? 'active' : ''}}" title="Right" ng-click="applyCellTextAlign('right')">
+                                                <span class="glyphicon glyphicon-align-right"></span>
+                                                <span class="text">Right</span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-small" title="{{ctx.selectionFormatState.isMergedCell ? 'UnMerge' : 'Merge'}}" ng-click="mergeCells()" style="clear:both;">
+                                                <span class="glyphicon glyphicon-th-large"></span>
+                                                <span class="text">merge</span>
+                                            </button>
+                                        </div>
+                                        <div class="btn-group btn-group-h" style="display:none;">
+                                            <button type="button" class="btn btn-default btn-small" title="Top" ng-click="applyCellVerticalAlign('top')">
+                                                <span class="top ribbon-icon"></span>
+                                                <span class="text">Top</span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-small" title="Middle" ng-click="applyCellVerticalAlign('middle')">
+                                                <span class="middle ribbon-icon"></span>
+                                                <span class="text">Middle</span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-small" title="Bottom" ng-click="applyCellVerticalAlign('bottom')">
+                                                <span class="bottom ribbon-icon"></span>
+                                                <span class="text">Bottom</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer text-center">Alignment</div>
+                            </div>
+                            <div class="panel panel-default" style="display:none">
+                                <div class="panel-body">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn-large no-border">
+                                            <span class="print ribbon-icon"></span>
+                                            <span class="text">Print</span>
+                                        </button>
+                                        <div class="btn-group-vertical">
+                                            <button type="button" class="btn btn-default btn-small no-border">
+                                                <span class="pagewidth ribbon-icon"></span>
+                                                <span class="text">Page Width</span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-small no-border">
+                                                <span class="singlepage ribbon-icon"></span>
+                                                <span class="text">Single Page</span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-small no-border">
+                                                <span class="selection ribbon-icon"></span>
+                                                <span class="text">Selection</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer text-center">Print</div>
+                            </div>
+                            <div class="panel panel-default" style="display:none">
+                                <div class="panel-body">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn-large no-border">
+                                            <span class="group ribbon-icon"></span>
+                                            <span class="text">Group</span>
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-large no-border">
+                                            <span class="ungroup ribbon-icon"></span>
+                                            <span class="text">Ungroup</span>
+                                        </button>
+                                        <div class="btn-group-vertical">
+                                            <button type="button" class="btn btn-default btn-small no-border">
+                                                <span class="showdetail ribbon-icon"></span>
+                                                <span class="text">Show Detail</span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-small no-border">
+                                                <span class="hidedetail ribbon-icon"></span>
+                                                <span class="text">Hide Detail</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer text-center">Group</div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn-large no-border" ng-click="freeze()">
+                                            <span class="glyphicon glyphicon-list"></span>
+                                            <span class="text">{{ctx.flexSheet.frozenRows !== 0 || ctx.flexSheet.frozenColumns !== 0 ? 'Unfreeze' : 'Freeze'}}</span>
+                                        </button>
+                                        <div class="btn-group-vertical" style="display:none">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" /> Gridlines
+                                                </label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" /> Headings
+                                                </label>
+                                            </div>
+                                            <select class="form-control input-sm">
+                                                <option>Blue</option>
+                                                <option>Silver</option>
+                                                <option>Black</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer text-center">View</div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <button type="button" class="btn btn-default btn-large no-border" data-toggle="modal" data-target="#excelStyle">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                        <span class="text">Styles</span>
+                                    </button>
+                                </div>
+                                <div class="panel-footer text-center">Styles</div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn-large no-border" data-toggle="modal" data-target="#excelSort">
+                                            <span class="glyphicon glyphicon-sort-by-attributes"></span>
+                                            <span class="text">Sort</span>
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-large no-border" ng-click="showFilter()" ng-disabled="!ctx.filterEnable">
+                                            <span class="glyphicon glyphicon-filter"></span>
+                                            <span class="text">Filter</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="panel-footer text-center">Editing</div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn-large no-border" ng-click="showChartTypes($event)">
+                                            <span class="glyphicon glyphicon-stats"></span>
+                                            <span class="text">Insert Chart</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="panel-footer text-center">Charts</div>
+                            </div>
+                        </div>
+                        <div class="top-boxes row" id="excls">
+                            <div class="col-sm-1 col-xs-2">{{ctx.selection.position}}</div>
+                            <div class="col-sm-1 col-xs-2 fn-label text-right">fx</div>
+                            <div class="col-sm-10 col-xs-8 fn-box">
+                                <input type="text" class="form-control" ng-model="ctx.selection.content" ng-keydown="updateSelectionContent($event)" ng-keyup="showFunctionList($event)" ng-focus="pendingCellEditAction()" />
+                            </div>
+                        </div>
+                        
+                        <wj-flex-sheet control="ctx.excelIOSheet" selected-sheet-changed="SelectedSheetChanged(e)" initialized="initializeExcelIOSheet(s)" loaded="loaded(s,e)" beginning-edit="beginningEdit1(s,e)" cell-edit-ended="cellEditEnding(s,e)" style="margin-bottom:40px;">
+                        </wj-flex-sheet>
+                        <input type="button" class="btn lg btn-s button-add" ng-disabled="isAlwaysDisabled" ng-click="SavePdfToDB1()" style="width: 100px; border: 0px;position:absolute;right:70px; margin-top:-30px;" value="Save" />
+                    </div>
+                </uib-tab>
+                <uib-tab heading="PDF PREVIEW" style="outline:none" ng-click="ShowPDF(0)"  disable="disable" active="activeTab[0]">
+                    <!--<input type="button" class="btn lg btn-s" ng-disabled="isAlwaysDisabled" ng-click="SavePdfToDB()" value="Save" />
+                    <input type="button" class="btn lg btn-f" style="margin-left: 200px;" value="Download" ng-click="PrintElem('#mydiv')" />-->
+                    <div id="mydiv">
+                        <img class="xt-pdf-Images" src="images/file-page1.png"><br />
+                        <img class="xt-pdf-Images" src="images/file-page2.png"><br />
+                        <img class="xt-pdf-Images" src="images/file-page3.png"><br />
+                        <img class="xt-pdf-Images" src="images/file-page4.png"><br />
+                        <img class="xt-pdf-Images" src="images/file-page5.png"><br />
+                        <img class="xt-pdf-Images" src="images/file-page6.png">
+                        <div id="example" ng-disabled="disable">
+                            <!-- <input type="text" id="fsdf" style="margin-left: 186px; margin-top: 176px;height: 18px;width: 30px;" /> -->
+                            <input type="text" class="nonstatic" id="xt-pdf-calendarYear" ng-model="icDiscObj.ICDISCCalendarYear" ng-change="UpdateFunc(299,icDiscObj.ICDISCCalendarYear)" style="margin-left: 192px; margin-top: 176px;height: 18px;width: 30px;" />
+                            <input type="text" class="nonstatic" id="xt-pdf-TaxYearBeginning" ng-model="icDiscObj.ICDISCTaxYearBeginning" ng-change="UpdateFunc(300,icDiscObj.ICDISCTaxYearBeginning)" style="margin-left: 140px; margin-top: 176px;height: 18px;width: 250px;" />
+                            <input type="text" class="nonstatic" id="xt-pdf-TaxYearBeginningYear" ng-model="icDiscObj.ICDISCTaxYearBeginningYear" ng-change="UpdateFunc(301,icDiscObj.ICDISCTaxYearBeginningYear)" style="margin-left: 34px; margin-top: 176px;height: 18px;width: 30px;" />
+                            <input type="text" class="nonstatic" id="xt-pdf-TaxYearEnding" ng-model="icDiscObj.ICDISCTaxYearEnding" ng-change="UpdateFunc(302,icDiscObj.ICDISCTaxYearEnding)" style="margin-left: 74px; margin-top: 176px;height: 18px;width: 239px;" />
+                            <input type="text" class="nonstatic" id="xt-pdf-TaxYearEndingYear" ng-model="icDiscObj.ICDISCTaxYearEndingYear" ng-change="UpdateFunc(303,icDiscObj.ICDISCTaxYearEndingYear)" style="margin-left: 26px; margin-top: 176px;height: 18px;width: 30px;" />
+                            <br />
+                            <!--<md-datepicker ng-model="icDiscObj.ICDISCDateOfElection" md-placeholder="Enter date"
+        md-min-date="minDate" md-max-date="maxDate"></md-datepicker>-->
+                            <input type="date" id="datepick" ng-model="icDiscObj.ICDISCDateOfElection" ng-change="UpdateFunc(307,icDiscObj.ICDISCDateOfElection)"  style="margin-left:83px;margin-top: 0;height: 26px;">
+                            <input class="col" id="xt-pdf-icdName" ng-model="icDiscObj.ICDISCLegalName" ng-change="UpdateFunc(304,icDiscObj.ICDISCLegalName)" type="text"  style="margin-left:22px;margin-top: 18px;width: 547px;height: 26px;" />
+                            <input class="col" id="xt-pdf-EIN" ng-model="icDiscObj.ICDISCEIN" ng-change="UpdateFunc(309,icDiscObj.ICDISCEIN)" type="text"  name="whatever" style="margin-left:40px; margin-top: 0px;width: 216px;height: 26px;" />
+                            <br />
+                            <input type="text" id="xt-pdf-addressLine" ng-model="icDiscObj.ICDISCAddressLine" ng-change="UpdateFunc(305,icDiscObj.ICDISCAddressLine)"  style="margin-left: 250px;margin-top: 18px;width: 547px;height: 26px;" />
+                            <input class="col" id="xt-pdf-DateIncorporated" type="text" ng-model="icDiscObj.ICDISCDateIncorporated" ng-change="UpdateFunc(310,icDiscObj.ICDISCDateIncorporated)" name="whatever"  style="margin-left:40px; margin-top: 0px;width: 216px;height: 26px;" />
+                            <br />
+                            <input type="text" id="xt-pdf-BAC0" ng-model="icDiscObj.ICDISCBAC[0]"  style="margin-left: 69px; margin-top: 44px;height: 22px;width: 22px;">
+                            <input type="text" id="xt-pdf-BAC1" ng-model="icDiscObj.ICDISCBAC[1]"  style="margin-left: 2px; margin-top: 20px;height: 22px;width: 22px;">
+                            <input type="text" id="xt-pdf-BAC2" ng-model="icDiscObj.ICDISCBAC[2]"  style="margin-left: 3px; margin-top: 20px;height: 22px;width: 22px;">
+                            <input type="text" id="xt-pdf-BAC3" ng-model="icDiscObj.ICDISCBAC[3]"  style="margin-left: 2px; margin-top: 20px;height: 22px;width: 22px;">
+                            <input type="text" id="xt-pdf-BAC4" ng-model="icDiscObj.ICDISCBAC[4]"  style="margin-left: 4px; margin-top: 20px;height: 22px;width: 22px;">
+                            <input type="text" id="xt-pdf-BAC5" ng-model="icDiscObj.ICDISCBAC[5]"  style="margin-left: 2px; margin-top: 20px;height: 22px;width: 22px;">
+                            <input type="text" id="xt-pdf-location" ng-model="icDiscObj.ICDISCLocation" ng-change="UpdateFunc(306,icDiscObj.ICDISCLocation)"  style="margin-left: 10px;margin-top: 20px;width: 547px;height: 26px;" />
+                            <input class="col" id="xt-pdf-TotalAssets" type="text" ng-model="icDiscObj.ICDISCTotalAssets" ng-change="UpdateFunc(311,icDiscObj.ICDISCTotalAssets)" name="whatever"  style="margin-left:40px; margin-top: 0px;width: 216px;height: 26px;" />
+                            <br />
+                            <input type="checkbox" id="xt-pdf-InitialReturn" ng-model="icDiscObj.ICDISCInitialReturn" ng-change="UpdateFuncForCheckBox(312,icDiscObj.ICDISCInitialReturn)" style="height: 18px;width: 18px;margin-left: 318px;   margin-top: 5px;opacity:inherit;">
+                            <input type="checkbox" id="xt-pdf-FinalReturn" ng-model="icDiscObj.ICDISCFinalReturn" ng-change="UpdateFuncForCheckBox(313,icDiscObj.ICDISCFinalReturn)" style="height: 18px; width: 18px; margin-left: 127px; margin-top: 5px; opacity: inherit;">
+                            <input type="checkbox" id="xt-pdf-NameChange" ng-model="icDiscObj.ICDISCNameChange" ng-change="UpdateFuncForCheckBox(314,icDiscObj.ICDISCNameChange)" style="height: 18px; width: 18px; margin-left: 112px; margin-top: 5px; opacity: inherit;">
+                            <input type="checkbox" id="xt-pdf-AddressChange" ng-model="icDiscObj.ICDISCAddressChange" ng-change="UpdateFuncForCheckBox(315,icDiscObj.ICDISCAddressChange)" style="height: 18px; width: 18px; margin-left: 139px; margin-top: 5px; opacity: inherit;">
+                            <input type="checkbox" id="xt-pdf-AmendedReturn" ng-model="icDiscObj.ICDISCAmendedReturn" ng-change="UpdateFuncForCheckBox(316,icDiscObj.ICDISCAmendedReturn)" style="height: 18px; width: 18px; margin-left: 155px; margin-top: 5px; opacity: inherit;">
+                            <br />
+                            <input type="radio" id="xt-pdf-TaxYear" ng-model="icDiscObj.G1_Yes" ng-change="UpdateFuncForRadioButton(317,icDiscObj.G1_Yes,318)" value="Yes" style="height: 18px;width: 18px;opacity:inherit;float:left; margin-bottom:0px; margin-left: 1003px;margin-top: 22px;">
+                            <input type="radio" id="xt-pdf-TaxYear2" ng-model="icDiscObj.G1_Yes" ng-change="UpdateFuncForRadioButton(317,icDiscObj.G1_Yes,318)" ng-value="No" style="height: 18px;width: 18px;opacity:inherit;margin-left: 20px;margin-top: 22px; margin-right:53px;">
+                            <br />
+                            <input type="text" id="xt-pdf-val1" ng-model="icDiscObj.G1_Name1" ng-change="UpdateFunc(319, icDiscObj.G1_Name1)" style="margin-left: 77px;margin-top: 109px;height: 22px;width: 231px;" class="nonstatic">
+                            <input type="text" id="xt-pdf-val2" ng-model="icDiscObj.G1_Number1" ng-change="UpdateFunc(320, icDiscObj.G1_Number1)" style="margin-left: 13px;margin-top: 20px;height: 22px;width: 134px;" class="nonstatic">
+                            <input type="text" id="xt-pdf-val3" ng-model="icDiscObj.G1_Address1" ng-change="UpdateFunc(321, icDiscObj.G1_Address1)" style="margin-left: 11px;margin-top: 20px;height: 22px;width: 280px;" class="nonstatic">
+                            <input type="text" id="xt-pdf-val4" ng-model="icDiscObj.G1_VotingStockOwned1" ng-change="UpdateFunc(322, icDiscObj.G1_VotingStockOwned1)" style="margin-left: 11px;margin-top: 20px;height: 22px;width: 28px;" class="nonstatic">
+                            <input type="text" id="xt-pdf-val5" ng-model="icDiscObj.G1_TotalAssets1" ng-change="UpdateFunc(323, icDiscObj.G1_TotalAssets1)" style="margin-left: 23px;margin-top: 20px;height: 22px;width: 157px;" class="nonstatic">
+                            <input type="radio" id="xt-pdf-TaxYear" ng-model="icDiscObj.G1_ForeignOwnerYes" ng-change="UpdateFuncForRadioButton(324,icDiscObj.G1_ForeignOwnerYes1,325)" ng-value="Yes" style="height: 18px;width: 18px;opacity:inherit;margin-left: 19px;margin-top:2px;margin-bottom: 2px;">
+                            <input type="radio" id="xt-pdf-TaxYear2" ng-model="icDiscObj.G1_ForeignOwnerYes" ng-change="UpdateFuncForRadioButton(324,icDiscObj.G1_ForeignOwnerYes1,325)" value="No" style="height: 18px;width: 18px;opacity:inherit;margin-left: 19px;margin-top:2px;margin-bottom: 2px;" />
+                            <br />
+                            <input type="text" id="xt-pdf-val6" ng-model="icDiscObj.G1_Name2" ng-change="UpdateFunc(326, icDiscObj.G1_Name2)" style="margin-left:77px;margin-top: 21px;height: 22px;width: 231px;" class="nonstatic">
+                            <input type="text" id="xt-pdf-val7" ng-model="icDiscObj.G1_Number2" ng-change="UpdateFunc(327, icDiscObj.G1_Number2)" style="margin-left: 13px;margin-top: 20px;height: 22px;width: 134px;" class="nonstatic">
+                            <input type="text" id="xt-pdf-val8" ng-model="icDiscObj.G1_Address2" ng-change="UpdateFunc(328, icDiscObj.G1_Address2)" style="margin-left: 11px;margin-top: 20px;height: 22px;width: 280px;" class="nonstatic">
+                            <input type="text" id="xt-pdf-val9" ng-model="icDiscObj.G1_VotingStockOwned2" ng-change="UpdateFunc(329, icDiscObj.G1_VotingStockOwned2)" style="margin-left: 11px;margin-top: 20px;height: 22px;width: 28px;" class="nonstatic">
+                            <input type="text" id="xt-pdf-val10" ng-model="icDiscObj.G1_TotalAssets2" ng-change="UpdateFunc(330, icDiscObj.G1_TotalAssets2)" style="margin-left: 23px;margin-top: 20px;height: 22px;width: 157px;" class="nonstatic">
+                            <input type="radio" id="xt-pdf-TaxYear" ng-model="icDiscObj.G1_ForeignOwnerYes2" ng-change="UpdateFuncForRadioButton(331,icDiscObj.G1_ForeignOwnerYes2,332)" value="Yes" style="height: 18px;width: 18px;opacity:inherit;margin-left: 19px;margin-top:5px;margin-bottom: 5px;">
+                            <input type="radio" id="xt-pdf-TaxYear2" ng-model="icDiscObj.G1_ForeignOwnerYes2" ng-change="UpdateFuncForRadioButton(331,icDiscObj.G1_ForeignOwnerYes2,332)" ng-value="No" style="height: 18px;width: 18px;opacity:inherit;margin-left: 19px;margin-top:5px;margin-bottom: 5px;" />
+                            <br>
+                            <input type="text" id="xt-pdf-val11" ng-model="icDiscObj.TaxYearFirstCorp" ng-change="UpdateFunc(333, icDiscObj.TaxYearFirstCorp)" style="margin-left: 82px;margin-top: 45px;height: 22px;width: 380px;" class="nonstatic">
+                            <input type="text" id="xt-pdf-val12" ng-model="icDiscObj.IRSServiceCenter1" ng-change="UpdateFunc(334, icDiscObj.IRSServiceCenter1)" style="margin-left: 11px;margin-top: 20px;height: 22px;width: 591px;" class="nonstatic">
+                            <br>
+                            <input type="text" id="xt-pdf-val13" ng-model="icDiscObj.TaxYearSecondCorp" ng-change="UpdateFunc(335, icDiscObj.TaxYearSecondCorp)" style="margin-left: 82px;margin-top: 23px;height: 22px;width: 380px;" class="nonstatic">
+                            <input type="text" id="xt-pdf-val14" ng-model="icDiscObj.IRSServiceCenter2" ng-change="UpdateFunc(336, icDiscObj.IRSServiceCenter2)" style="margin-left: 11px;margin-top: 20px;height: 22px;width: 591px;" class="nonstatic">
+                            <br />
+                            <input type="checkbox" id="xt-pdf-check1" ng-model="icDiscObj.ICDISC50_50" ng-change="UpdateFuncForCheckBox(337,icDiscObj.ICDISC50_50)" style="height: 16px;width: 16px;margin-left: 117px;margin-top: 50px;opacity:inherit;">
+                            <input type="checkbox" id="xt-pdf-check2" ng-model="icDiscObj.ICDISC4Percent" ng-change="UpdateFuncForCheckBox(338,icDiscObj.ICDISC4Percent)" style="height: 16px;width: 16px;margin-left: 344px;margin-top: 50px;opacity: inherit;">
+                            <input type="checkbox" id="xt-pdf-check3" ng-model="icDiscObj.ICDISCSec482" ng-change="UpdateFuncForCheckBox(339,icDiscObj.ICDISCSec482)" style="height: 16px;width: 16px;margin-left: 222px;margin-top: 38px;opacity: inherit;">
+                            <br />
+                            <input type="checkbox" id="xt-pdf-check4" ng-model="icDiscObj.ICDISCSec994b2" ng-change="UpdateFuncForCheckBox(340,icDiscObj.ICDISCSec994b2)" style="height: 16px;width: 16px;margin-left: 218px;margin-top: 2px;opacity:inherit;">
+                            <br />
+                            <input type="text" id="xt-pdf-TaxableIncome1" ng-change="UpdateFunc(341,icDiscObj.ICDISCTaxableIncome1)" ng-model="icDiscObj.ICDISCTaxableIncome1" style="margin-left: 915px;margin-top: 92px;height: 19px;width: 153px;"  />
+                            <br />
+                            <input type="text" id="xt-pdf-TaxableIncome2" ng-change="UpdateFunc(341,icDiscObj.ICDISCTaxableIncome2)" ng-model="icDiscObj.ICDISCTaxableIncome2" style="margin-left: 916px;margin-top: 3px;height: 18px;width: 153px;" >
+                            <br />
+                            <input type="text" id="xt-pdf-TaxableIncome3" ng-change="UpdateFunc(341,icDiscObj.ICDISCTaxableIncome3)" ng-model="icDiscObj.ICDISCTaxableIncome3" style="margin-left: 916px;margin-top: 5px;height: 18px;width: 153px;" >
+                            <br />
+                            <input type="text" id="xt-pdf-TaxableIncome4" ng-change="UpdateFunc(341,icDiscObj.ICDISCTaxableIncome4)" ng-model="icDiscObj.ICDISCTaxableIncome4" style="margin-left: 916px;margin-top: 4px;height: 18px;width: 153px;" >
+                            <br />
+                            <input type="text" id="xt-pdf-TaxableIncome5" ng-change="UpdateFunc(341,icDiscObj.ICDISCTaxableIncome5)" ng-model="icDiscObj.ICDISCTaxableIncome5" style="margin-left: 916px;margin-top: 27px;height: 18px;width: 153px;" >
+                            <br />
+                            <input type="text" id="xt-pdf-TaxableIncome6a" ng-change="UpdateFunc(341,icDiscObj.ICDISCTaxableIncome6a)" ng-model="icDiscObj.ICDISCTaxableIncome6a" style="margin-left: 715px;margin-top: 3px;height: 18px;width: 153px;" >
+                            <br />
+                            <input type="text" id="xt-pdf-TaxableIncome6b" ng-change="UpdateFunc(341,icDiscObj.ICDISCTaxableIncome6b)" ng-model="icDiscObj.ICDISCTaxableIncome6b" style="margin-left: 715px;margin-top: 6px;height: 18px;width: 153px;" >
+                            <br />
+                            <input type="text" id="xt-pdf-TaxableIncome6c" ng-change="UpdateFunc(341,icDiscObj.ICDISCTaxableIncome6c)" ng-model="icDiscObj.ICDISCTaxableIncome6c" style="margin-left: 916px;margin-top: 3px;height: 18px;width: 153px;" >
+                            <br />
+                            <input type="text" id="xt-pdf-TaxableIncome7" ng-change="UpdateFunc(341,icDiscObj.ICDISCTaxableIncome7)" ng-model="icDiscObj.ICDISCTaxableIncome7" style="margin-left: 916px;margin-top: 5px;height: 18px;width: 153px;" >
+                            <br />
+                            <input type="text" id="xt-pdf-TaxableIncome8" ng-change="UpdateFunc(341,icDiscObj.ICDISCTaxableIncome8)" ng-model="icDiscObj.ICDISCTaxableIncome8" style="margin-left: 916px;margin-top: 5px;height: 18px;width: 153px;" >
+                            <br />
+                            <input type="text" id="xt-pdf-val15" style="margin-left: 779px;margin-top: 48px;height: 18px;width: 292px;">
+                            <br />
+                            <input type="text" id="xt-pdf-PreparerName" ng-model="icDiscObj.ICDISCPreparerName" ng-change="UpdateFunc(353,icDiscObj.ICDISCPreparerName)" style="margin-left: 167px;margin-top: 48px;height: 18px;width: 267px;" class="nonstatic">
+                            <!--<input type="checkbox" id="xt-pdf-checkSelfEmployed" ng-model="icDiscObj.ICDISCSelfEmployed" ng-change="UpdateFuncForCheckBox(354,icDiscObj.ICDISCSelfEmployed)" style="height: 16px;width: 16px;margin-left: 898px;margin-top: -31px;opacity:inherit;">-->
+                            <input type="text" id="xt-pdf-PTIN" ng-model="icDiscObj.ICDISCPTIN" ng-change="UpdateFunc(355,icDiscObj.ICDISCPTIN)" style="margin-left: 506px;margin-top: 48px;height: 18px;width: 126px;" class="nonstatic">
+                            <br />
+                            <input type="text" id="xt-pdf-FirmName" ng-model="icDiscObj.ICDISCFirmName" ng-change="UpdateFunc(356,icDiscObj.ICDISCFirmName)" style="margin-left: 166px;margin-top: 6px;height: 18px;width: 633px;" class="nonstatic">
+                            <input type="text" id="xt-pdf-FirmEIN" ng-model="icDiscObj.ICDISCFirmEIN" ng-change="UpdateFunc(357,icDiscObj.ICDISCFirmEIN)" style="margin-left: 91px;margin-top: 3px;height: 18px;width: 176px;" class="nonstatic">
+                            <br />
+                            <input type="text" id="xt-pdf-FirmAddress" ng-model="icDiscObj.ICDISCFirmAddress" ng-change="UpdateFunc(358,icDiscObj.ICDISCFirmAddress)" style="margin-left: 166px;margin-top: 4px;height: 18px;width: 633px;" class="nonstatic">
+                            <input type="text" id="xt-pdf-FirmPhone" ng-model="icDiscObj.ICDISCFirmPhone" ng-change="UpdateFunc(359,icDiscObj.ICDISCFirmPhone)" style="margin-left: 91px;margin-top: 3px;height: 18px;width: 176px;" class="nonstatic">
+                            <!--page2-->
+                            <input type="text" style="margin-left: 910px;margin-top: 319px;width: 161px;height: 22px;">
+                            <br />
+                            <input type="text" style="margin-left:910px; margin-top: 0px;width: 161px;height: 22px;">
+                            <br />
+                            <input type="text" style="margin-left: 910px;margin-top: 0px;width: 161px;height: 23px;">
+                            <br />
+                            <input type="text" style="margin-left:910px; margin-top: 0px;width: 161px;height: 22px;">
+                            <br />
+                            <input type="text" style="margin-left: 910px;margin-top: 0px;width: 161px;height: 23px;">
+                            <br />
+                            <input type="text" style="margin-left:910px; margin-top: 0px;width: 161px;height: 22px;">
+                            <br />
+                            <input type="text" style="margin-left:910px; margin-top: 0px;width: 161px;height: 22px;">
+                            <br />
+                            <input type="text" style="margin-left:910px; margin-top: 0px;width: 161px;height: 23px;">
+                            <br />
+                            <input type="checkbox" style="height: 18px; width: 18px; margin-left: 157px; margin-top: 23px; opacity:inherit;">
+                            <br />
+                            <input type="checkbox" style="height: 18px;width: 18px;margin-left: 157px;margin-top: 0px;opacity:inherit;">
+                            <br />
+                            <input type="checkbox" style="height: 18px;width: 18px;margin-left: 157px; margin-top:-21px; margin-bottom:13px; opacity:inherit;">
+                            <input type="text" style="margin-left: 387px;width: 493px;height: 21px; margin-left:387px;">
+                            <br />
+                            <input type="checkbox" style="height: 18px;width: 18px;margin-left: 1034px;margin-top: -26px;opacity:inherit;">
+                            <br />
+                            <input type="checkbox" style="height: 18px;width: 18px;margin-left: 1035px;margin-top: -2px;opacity:inherit;">
+                            <br />
+                            <input type="text" style="margin-left: 910px;margin-top: 19px;width: 160px;height: 26px;">
+                            <br />
+                            <input type="radio" value="Yes" style="height: 19px; width: 17px; margin-left: 949px; margin-top: 0px; opacity:inherit;">
+                            <input type="radio" value="No" style="height: 19px; width: 17px; margin-left: 47px; margin-top: 2px; opacity:inherit;">
+                            <br />
+                            <input type="radio" value="Yes" style="height: 19px; width: 17px; margin-left: 949px; margin-top: 0px; opacity:inherit;">
+                            <input type="radio" value="No" style="height: 19px; width: 17px; margin-left: 47px; margin-top: 2px; opacity:inherit;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_i_b" ng-change="UpdateFunc(379,icDiscObj.ICDISCScheB1a_i_b)" style="margin-left: 481px; margin-top: 65px;width: 146px;height: 65px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_i_c" ng-change="UpdateFunc(380,icDiscObj.ICDISCScheB1a_i_c)" style="margin-left: -3px; margin-top: 65px;width: 146px;height: 65px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_i_d" ng-change="UpdateFunc(381,icDiscObj.ICDISCScheB1a_i_d)" style="margin-left: -2px; margin-top: 65px;width: 146px;height: 65px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_i_e" style="margin-left: -2px; margin-top: 65px;width: 146px;height: 65px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_ii_b" ng-change="UpdateFunc(383,icDiscObj.ICDISCScheB1a_ii_b)" style="margin-left: 481px; margin-top: 0;width: 146px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_ii_c" ng-change="UpdateFunc(384,icDiscObj.ICDISCScheB1a_ii_c)" style="margin-left: -3px; margin-top: 0;width: 146px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_ii_d" ng-change="UpdateFunc(385,icDiscObj.ICDISCScheB1a_ii_d)" style="margin-left: -2px; margin-top: 0;width: 146px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_ii_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 23px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_iii_b" ng-change="UpdateFunc(387,icDiscObj.ICDISCScheB1a_iii_b)" style="margin-left: 481px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_iii_c" ng-change="UpdateFunc(388,icDiscObj.ICDISCScheB1a_iii_c)" style="margin-left: -3px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_iii_d" ng-change="UpdateFunc(389,icDiscObj.ICDISCScheB1a_iii_d)" style="margin-left: -2px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_iii_e" style="margin-left: -2px; margin-top: 0px;width: 146px;height: 45px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_iv_b" ng-change="UpdateFunc(391,icDiscObj.ICDISCScheB1a_iv_b)" style="margin-left: 481px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_iv_c" ng-change="UpdateFunc(392,icDiscObj.ICDISCScheB1a_iv_c)" style="margin-left: -3px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_iv_d" ng-change="UpdateFunc(393,icDiscObj.ICDISCScheB1a_iv_d)" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1a_iv_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1b_i_b" ng-change="UpdateFunc(395,icDiscObj.ICDISCScheB1b_i_b)" style="margin-left: 481px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1b_i_c" ng-change="UpdateFunc(396,icDiscObj.ICDISCScheB1b_i_c)" style="margin-left: -3px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1b_i_d" ng-change="UpdateFunc(397,icDiscObj.ICDISCScheB1b_i_d)" style="margin-left: -2px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1b_i_e" style="margin-left: -2px; margin-top: 0px;width: 146px;height: 45px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1b_ii_b" ng-change="UpdateFunc(399,icDiscObj.ICDISCScheB1b_ii_b)" style="margin-left: 481px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1b_ii_c" ng-change="UpdateFunc(400,icDiscObj.ICDISCScheB1b_ii_c)" style="margin-left: -3px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1b_ii_d" ng-change="UpdateFunc(401,icDiscObj.ICDISCScheB1b_ii_d)" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1b_ii_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1c_total_b" style="margin-left: 481px; margin-top: 0;width: 146px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1c_total_c" style="margin-left: -3px; margin-top: 0;width: 146px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1c_total_d" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB1c_total_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2a_b" ng-change="UpdateFunc(407,icDiscObj.ICDISCScheB2a_b)" style="margin-left: 481px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2a_c" ng-change="UpdateFunc(408,icDiscObj.ICDISCScheB2a_c)" style="margin-left: -3px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2a_d" ng-change="UpdateFunc(409,icDiscObj.ICDISCScheB2a_d)" style="margin-left: -2px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2a_e" style="margin-left: -2px; margin-top: 0px;width: 146px;height: 45px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2b_b" ng-change="UpdateFunc(411,icDiscObj.ICDISCScheB2a_b)" style="margin-left: 481px; margin-top: 0px;width: 146px;height: 44px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2b_c" ng-change="UpdateFunc(412,icDiscObj.ICDISCScheB2a_b)" style="margin-left: -3px; margin-top: 0px;width: 146px;height: 44px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2b_d" ng-change="UpdateFunc(413,icDiscObj.ICDISCScheB2a_b)" style="margin-left: -2px; margin-top: 0px;width: 146px;height: 44px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2b_e" style="margin-left: -2px; margin-top: 0px;width: 146px;height: 44px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2c_b" ng-change="UpdateFunc(415, icDiscObj.ICDISCScheB2c_b)" style="margin-left: 481px; margin-top: 0;width: 146px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2c_c" ng-change="UpdateFunc(416, icDiscObj.ICDISCScheB2c_c)" style="margin-left: -3px; margin-top: 0;width: 146px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2c_d" ng-change="UpdateFunc(417, icDiscObj.ICDISCScheB2c_d)" style="margin-left: -2px; margin-top: 0;width: 146px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2c_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 23px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2d_b" ng-change="UpdateFunc(419, icDiscObj.ICDISCScheB2d_b)" style="margin-left: 481px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2d_c" ng-change="UpdateFunc(420, icDiscObj.ICDISCScheB2d_c)" style="margin-left: -3px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2d_d" ng-change="UpdateFunc(421, icDiscObj.ICDISCScheB2d_d)" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2d_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2e_d" ng-change="UpdateFunc(423, icDiscObj.ICDISCScheB2e_d)" style="margin-left: 776px; margin-top: 0px;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2e_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" readonly>
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2f_d" ng-change="UpdateFunc(425, icDiscObj.ICDISCScheB2f_d)" style="margin-left: 776px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2f_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2g_d" ng-change="UpdateFunc(427, icDiscObj.ICDISCScheB2g_d)" style="margin-left: 776px; margin-top: 0;width: 146px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2g_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 23px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2h_d" ng-change="UpdateFunc(429, icDiscObj.ICDISCScheB2h_d)" style="margin-left: 776px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2h_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2i_d" ng-change="UpdateFunc(431, icDiscObj.ICDISCScheB2i_d)" style="margin-left: 776px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2i_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2j_b" ng-change="UpdateFunc(433, icDiscObj.ICDISCScheB2j_b)" style="margin-left: 481px; margin-top: 0;width: 146px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2j_c" ng-change="UpdateFunc(434, icDiscObj.ICDISCScheB2j_c)" style="margin-left: -3px; margin-top: 0;width: 146px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2j_d" ng-change="UpdateFunc(435, icDiscObj.ICDISCScheB2j_d)" style="margin-left: -2px; margin-top: 0;width: 146px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2j_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 23px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2k_b" style="margin-left: 481px; margin-top: 0;width: 146px;height: 23px;" >
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2k_c" style="margin-left: -3px; margin-top: 0;width: 146px;height: 23px;" >
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2k_d" style="margin-left: -2px; margin-top: 0;width: 146px;height: 23px;" >
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB2k_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 23px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3a_b" ng-change="UpdateFunc(441, icDiscObj.ICDISCScheB3a_b)" style="margin-left: 481px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3a_c" ng-change="UpdateFunc(442, icDiscObj.ICDISCScheB3a_c)" style="margin-left: -3px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3a_d" ng-change="UpdateFunc(443, icDiscObj.ICDISCScheB3a_d)" style="margin-left: -2px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3a_e" style="margin-left: -2px; margin-top: 0px;width: 146px;height: 45px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3b_b" ng-change="UpdateFunc(445, icDiscObj.ICDISCScheB3b_b)" style="margin-left: 481px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3b_c" ng-change="UpdateFunc(446, icDiscObj.ICDISCScheB3b_c)" style="margin-left: -3px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3b_d" ng-change="UpdateFunc(447, icDiscObj.ICDISCScheB3b_d)" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3b_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3c_b" ng-change="UpdateFunc(449, icDiscObj.ICDISCScheB3c_b)" style="margin-left: 481px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3c_c" ng-change="UpdateFunc(450, icDiscObj.ICDISCScheB3c_c)" style="margin-left: -3px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3c_d" ng-change="UpdateFunc(451, icDiscObj.ICDISCScheB3c_d)" style="margin-left: -2px; margin-top: 0px;width: 146px;height: 45px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3c_e" style="margin-left: -2px; margin-top: 0px;width: 146px;height: 45px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3d_b" ng-change="UpdateFunc(453, icDiscObj.ICDISCScheB3d_b)" style="margin-left: 481px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3d_c" ng-change="UpdateFunc(454, icDiscObj.ICDISCScheB3d_c)" style="margin-left: -3px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3d_d" ng-change="UpdateFunc(455, icDiscObj.ICDISCScheB3d_d)" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3d_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3e_d" ng-change="UpdateFunc(457, icDiscObj.ICDISCScheB3e_d)" style="margin-left: 776px; margin-top: 0;width: 146px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3e_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3f_b" ng-change="UpdateFunc(459, icDiscObj.ICDISCScheB3f_b)" style="margin-left: 481px; margin-top: 0;width: 146px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3f_c" ng-change="UpdateFunc(460, icDiscObj.ICDISCScheB3f_c)" style="margin-left: -3px; margin-top: 0;width: 146px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3f_d" ng-change="UpdateFunc(461, icDiscObj.ICDISCScheB3f_d)" style="margin-left: -2px; margin-top: 0;width: 146px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3f_e" ng-change="UpdateFunc(462, icDiscObj.ICDISCScheB3f_e)" style="margin-left: -2px; margin-top: 0;width: 146px;height: 23px;" readonly>
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3g_b" style="margin-left: 481px; margin-top: 0;width: 146px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3g_c" style="margin-left: -3px; margin-top: 0;width: 146px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3g_d" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB3g_e" style="margin-left: -2px; margin-top: 0;width: 146px;height: 22px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.ICDISCScheB4_e" style="margin-left: 923px; margin-top: 0px;width: 146px;height: 44px;" >
+                            <!--page3-->
+                            <input type="text" style="width: 133px;height: 22px;margin-top: 228px;margin-left: 722px;">
+                            <input type="text" style="width: 133px;height: 22px;margin-left: 78px;">
+                            <br />
+                            <input type="text" style="height: 44px;margin-top: 0px;margin-left: 722px;width: 133px;">
+                            <input type="text" style="height: 44px;margin-left: 77px;width: 133px;">
+                            <br />
+                            <input type="text" style="height: 45px;margin-top: 0px;margin-left: 722px;width: 133px;">
+                            <input type="text" style="height: 45px;margin-left: 77px;width: 133px;">
+                            <br />
+                            <input style="width: 133px;height: 23px;margin-left: 722px;" type="text">
+                            <input style="width: 133px;height: 23px;margin-left: 77px;" type="text">
+                            <br />
+                            <input style="width: 133px;height: 22px;margin-left: 722px;" type="text">
+                            <input style="width: 133px;height: 22px;margin-left: 77px;" type="text">
+                            <br />
+                            <input style="width: 133px;height: 23px;margin-left: 722px;" type="text">
+                            <input style="width: 133px;height: 23px;margin-left: 77px;" type="text">
+                            <br />
+                            <input style="width: 133px;height: 22px;margin-left: 722px;" type="text">
+                            <input style="width: 133px;height: 22px;margin-left: 77px;" type="text">
+                            <br />
+                            <input style="width: 133px;height: 23px;margin-left: 722px;" type="text">
+                            <input style="width: 133px;height: 23px;margin-left: 77px;" type="text">
+                            <br />
+                            <input style="width: 133px;height: 21px;margin-left: 936px;" type="text">
+                            <br />
+                            <input style="width: 133px;height: 23px;margin-left: 722px;" type="text">
+                            <br />
+                            <input style="width: 133px;height: 44px;margin-left: 722px;" type="text">
+                            <br />
+                            <input style="width: 133px;height: 22px;margin-left: 722px;" type="text">
+                            <br />
+                            <input style="width: 133px;height: 23px;margin-left: 722px;" type="text">
+                            <br />
+                            <input style="width: 133px;height: 23px;margin-left: 722px;" type="text">
+                            <br />
+                            <input style="width: 133px;height: 22px;margin-left: 722px;" type="text">
+                            <br />
+                            <input style="width: 133px;height: 44px;margin-left: 722px;" type="text">
+                            <br />
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1a" style="height: 45px;margin-top: 6px;margin-left: 909px;width: 161px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1b" style="height: 22px;margin-left: 909px;width: 161px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1c" style="height: 22px;margin-left: 909px;width: 161px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1d" style="height: 23px;margin-left: 909px;width: 161px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1e" style="height: 22px;margin-left: 909px;width: 161px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1f" style="height: 22px;margin-left: 909px;width: 161px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1g" style="height: 23px;margin-left: 909px;width: 161px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1h" style="height: 22px;margin-left: 909px;width: 161px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1i" style="height: 22px;margin-left: 909px;width: 161px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1j" style="height: 22px;margin-left: 909px;width: 161px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1k" style="height: 23px;margin-left: 909px;width: 161px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1l" style="height: 22px;margin-left: 909px;width: 161px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1m_other" ng-change="UpdateFunc(512, icDiscObj.SchedE1m_other)" style="height: 23px;margin-left: 210px;width: 658px;" class="nonstatic">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1m_other2" ng-change="UpdateFunc(513, icDiscObj.SchedE1m_other2)" style="height: 22px;margin-left: 117px;width: 751px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedE1m" style="height: 22px;margin-left: 37px;width: 161px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE1n" style="height: 22px;margin-left: 909px;width: 161px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE2a" style="height: 45px;margin-left: 909px;width: 161px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE2b" style="height: 22px;margin-left: 909px;width: 161px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE2c" style="height: 22px;margin-left: 909px;width: 161px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE2d" style="height: 23px;margin-left: 909px;width: 161px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE2e" style="height: 22px;margin-left: 909px;width: 161px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE2f" style="height: 22px;margin-left: 909px;width: 161px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE2g_other" ng-change="UpdateFunc(522, icDiscObj.SchedE2g_other)" style="height: 23px;margin-left: 210px;width: 658px;" class="nonstatic">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE2g_other2" ng-change="UpdateFunc(523, icDiscObj.SchedE2g_other2)" style="height: 22px;margin-left: 117px;width: 751px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedE2g" style="height: 22px;margin-left: 37px;width: 161px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE2h" style="height: 23px;margin-left: 909px;width: 161px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedE3" style="height: 22px;margin-left: 909px;width: 161px;" >
+
+                            <!--page4-->
+                            <input type="text" ng-model="icDiscObj.SchedJ1" style="margin-left: 909px;margin-top: 384px;width: 161px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJ2" ng-change="UpdateFunc(528, icDiscObj.SchedJ2)" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJ3" ng-change="UpdateFunc(529, icDiscObj.SchedJ3)" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJ4" ng-change="UpdateFunc(530, icDiscObj.SchedJ4)" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJ5" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 23px;">
+                            <input type="text" ng-model="icDiscObj.SchedJ6" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;">
+                            <input type="text" ng-model="icDiscObj.SchedJ7" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;">
+                            <input type="text" ng-model="icDiscObj.SchedJ8" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 23px;">
+                            <input type="text" ng-model="icDiscObj.SchedJ9" ng-change="UpdateFunc(535, icDiscObj.SchedJ9)" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJ10" ng-change="UpdateFunc(536, icDiscObj.SchedJ10)" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJ11" ng-change="UpdateFunc(537, icDiscObj.SchedJ11)" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 23px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJ12" style="margin-left: 909px;margin-top: 89px;width:161px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJ13" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJ14" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 23px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJ15" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJ16" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJ17a" ng-change="UpdateFunc(543, icDiscObj.SchedJ17a)" style="margin-left: 909px;margin-top: 24px;width: 161px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJ17b" ng-change="UpdateFunc(544, icDiscObj.SchedJ17b)" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJ18" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJ19" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 23px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJ20" ng-change="UpdateFunc(547, icDiscObj.SchedJ20)" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJ21" ng-change="UpdateFunc(548, icDiscObj.SchedJ21)" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJ22" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 23px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJ23" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJ24" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" >
+
+                            <input type="text" ng-model="icDiscObj.SchedJPart2_1" style="margin-left: 909px;margin-top: 23px;width: 161px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJPart2_3" style="margin-left: 909px;margin-top: 23px;width: 161px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJPart2_4" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJPart2_5" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 23px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJPart2_6" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 44px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJPart2_7" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" >
+
+                            <input type="text" ng-model="icDiscObj.SchedJPart3_1" ng-change="UpdateFunc(559, icDiscObj.SchedJPart3_1)" style="margin-left: 909px;margin-top:24px;width: 161px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJPart3_2" ng-change="UpdateFunc(560, icDiscObj.SchedJPart3_2)" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJPart3_3" ng-change="UpdateFunc(561, icDiscObj.SchedJPart3_3)" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" readonly>
+
+                            <input type="text" ng-model="icDiscObj.SchedJPart4_1" style="margin-left: 909px;margin-top:23px;width: 161px;height: 22px;">
+                            <input type="text" ng-model="icDiscObj.SchedJPart4_2" ng-change="UpdateFunc(563, icDiscObj.SchedJPart4_2)" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJPart4_3" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" />
+                            <input type="text" ng-model="icDiscObj.SchedJPart4_4a" style="margin-left: 709px;margin-top:23px;width: 161px;height: 22px;">
+                            <input type="text" ng-model="icDiscObj.SchedJPart4_4b" style="margin-left: 709px;margin-top: 0px;width: 161px;height: 22px;">
+                            <input type="text" ng-model="icDiscObj.SchedJPart4_4c" ng-change="UpdateFunc(567, icDiscObj.SchedJPart4_4c)" style="margin-left: 709px;margin-top: 0px;width: 161px;height: 22px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedJPart4_4d" ng-change="UpdateFunc(568, icDiscObj.SchedJPart4_4d)" style="margin-left: 709px;margin-top: 0px;width: 161px;height: 22px;" class="nonstatic">
+
+                            <input type="text" ng-model="icDiscObj.SchedJPart5_1" style="margin-left: 909px;margin-top:24px;width: 161px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJPart5_2" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" >
+                            <input type="text" ng-model="icDiscObj.SchedJPart5_3" style="margin-left: 909px;margin-top: 0px;width: 161px;height: 22px;" >
+                            <!--page 5-->
+                            <input type="text" ng-model="icDiscObj.SchedL1a_a" ng-change="UpdateFunc(572, icDiscObj.SchedL1a_a)" style="margin-left: 749px;margin-top: 228px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL1a_b" style="margin-left: -3px;margin-top: 228px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL1b_a" ng-change="UpdateFunc(574, icDiscObj.SchedL1b_a)" style="margin-left: 749px;margin-top: 21px;height: 23px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL1b_b" style="margin-left: -3px;margin-top: 21px;height: 23px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL1c_a" ng-change="UpdateFunc(576, icDiscObj.SchedL1c_a)" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL1c_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL1d_a" ng-change="UpdateFunc(578, icDiscObj.SchedL1d_a)" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL1d_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" readonly>
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL1d_2_a" ng-change="UpdateFunc(580, icDiscObj.SchedL1d_2_a)" style="margin-left: 749px;margin-top: 0px;height: 23px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL1d_2_b" style="margin-left: -3px;margin-top: 0px;height: 23px;width: 160px;" >
+                            <br /><!--braces-->
+                            <input type="text" ng-model="icDiscObj.SchedL1e_a" ng-change="UpdateFunc(582, icDiscObj.SchedL1e_a)" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL1e_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL1f_a" ng-change="UpdateFunc(584, icDiscObj.SchedL1f_a)" style="margin-left: 749px;margin-top: 0px;height: 23px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL1f_b" style="margin-left: -3px;margin-top: 0px;height: 23px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL1g_a" ng-change="UpdateFunc(586, icDiscObj.SchedL1g_a)" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL1g_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL1h_a" ng-change="UpdateFunc(588, icDiscObj.SchedL1h_a)" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL1h_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL1h_2_a" ng-change="UpdateFunc(590, icDiscObj.SchedL1h_2_a)" style="margin-left: 749px;margin-top: 0px;height: 23px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL1h_2_b" style="margin-left: -3px;margin-top: 0px;height: 23px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL1i_a" ng-change="UpdateFunc(592, icDiscObj.SchedL1i_a)" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL1i_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL2_Line" ng-change="UpdateFunc(594, icDiscObj.SchedL2_Line)" style="margin-left: 384px;margin-top: 0px;height: 23px;width: 352px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL2_a" ng-change="UpdateFunc(595, icDiscObj.SchedL2_a)" style="margin-left: 9px;margin-top: 0px;height: 23px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL2_b" style="margin-left: -2px;margin-top: 0px;height: 23px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL3_a" style="margin-left: 749px;margin-top: 0px;height: 23px;width: 160px;" >
+                            <input type="text" ng-model="icDiscObj.SchedL3_b" style="margin-left: -3px;margin-top: 0px;height: 23px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL4_a" ng-change="UpdateFunc(599, icDiscObj.SchedL4_a)" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL4_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL5_a" ng-change="UpdateFunc(601, icDiscObj.SchedL5_a)" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL5_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL6_a" ng-change="UpdateFunc(603, icDiscObj.SchedL6_a)" style="margin-left: 749px;margin-top: 0px;height: 23px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL6_b" style="margin-left: -3px;margin-top: 0px;height: 23px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL7_a" ng-change="UpdateFunc(605, icDiscObj.SchedL7_a)" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL7_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL8_a" ng-change="UpdateFunc(607, icDiscObj.SchedL8_a)" style="margin-left: 749px;margin-top: 0px;height: 23px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL8_b" style="margin-left: -3px;margin-top: 0px;height: 23px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL9_a" ng-change="UpdateFunc(609, icDiscObj.SchedL9_a)" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL9_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL10_a" ng-change="UpdateFunc(611, icDiscObj.SchedL10_a)" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL10_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL11_a" ng-change="UpdateFunc(613, icDiscObj.SchedL11_a)" style="margin-left: 749px;margin-top: 0px;height: 23px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL11_b" style="margin-left: -3px;margin-top: 0px;height: 23px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL12_a" ng-change="UpdateFunc(615, icDiscObj.SchedL12_a)" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL12_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL13_a" ng-change="UpdateFunc(617, icDiscObj.SchedL13_a)" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL13_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL14_a" ng-change="UpdateFunc(619, icDiscObj.SchedL14_a)" style="margin-left: 749px;margin-top: 0px;height: 23px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedL14_b" style="margin-left: -3px;margin-top: 0px;height: 23px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedL15_a" style="margin-left: 749px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <input type="text" ng-model="icDiscObj.SchedL15_b" style="margin-left: -3px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+
+                            <!--M-1Section-->
+                            <input type="text" ng-model="icDiscObj.SchedM1_1" style="margin-left: 400px;margin-top: 24px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM1_2" ng-change="UpdateFunc(624, icDiscObj.SchedM1_2)" style="margin-left: 400px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM1_6_b" ng-change="UpdateFunc(631, icDiscObj.SchedM1_6_b)" style="margin-left: 598px;margin-top: 1px;height: 22px;width: 297px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM1_6_a" ng-change="UpdateFunc(630, icDiscObj.SchedM1_6_a)" style="margin-left: 11px;margin-top: 1px;height: 22px;width: 160px;" class="nonstatic">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM1_3_b" ng-change="UpdateFunc(626, icDiscObj.SchedM1_3_b)" style="margin-left: 237px;margin-top: 0px;height: 22px;width: 150px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM1_3_a" ng-change="UpdateFunc(625, icDiscObj.SchedM1_3_a)" style="margin-left: 8px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM1_7_b" ng-change="UpdateFunc(633, icDiscObj.SchedM1_7_b)" style="margin-left: 598px;margin-top: 22px;height: 22px;width: 297px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM1_7_a" ng-change="UpdateFunc(632, icDiscObj.SchedM1_7_a)" style="margin-left: 11px;margin-top: 22px;height: 22px;width: 160px;" class="nonstatic">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM1_4_b" ng-change="UpdateFunc(628, icDiscObj.SchedM1_4_b)" style="margin-left: 102px;margin-top: 0px;height: 22px;width: 286px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM1_4_a" ng-change="UpdateFunc(627, icDiscObj.SchedM1_4_a)" style="margin-left: 8px;margin-top: 0px;height: 22px;width: 160px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM1_8" style="margin-left: 347px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM1_5" style="margin-left: 399px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <input type="text" ng-model="icDiscObj.SchedM1_9" style="margin-left: 346px;margin-top: 0px;height: 22px;width: 160px;" ><!--M1-Section-->
+                            <br />
+                            <!--M-2-->
+                            <input type="text" ng-model="icDiscObj.SchedM2_1" style="margin-left: 399px;margin-top: 24px;height: 22px;width: 160px;" >
+                            <input type="text" ng-model="icDiscObj.SchedM2_5" style="margin-left: 346px;margin-top: 24px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM2_2_b" ng-change="UpdateFunc(638, icDiscObj.SchedM2_2_b)" style="margin-left: 250px;margin-top: 0px;height: 22px;width: 138px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM2_6_b" ng-change="UpdateFunc(644, icDiscObj.SchedM2_6_b)" style="margin-left: 396px;margin-top: 0px;height: 22px;width: 112px;" class="nonstatic">
+                            <br />
+
+                            <input type="text" ng-model="icDiscObj.SchedM2_2_c" ng-change="UpdateFunc(639, icDiscObj.SchedM2_2_c)" style="margin-left: 102px;margin-top: 0px;height: 22px;width: 286px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM2_2_a" style="margin-left: 8px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <input type="text" ng-model="icDiscObj.SchedM2_6_c" ng-change="UpdateFunc(645, icDiscObj.SchedM2_6_c)" style="margin-left: 36px;margin-top: 0px;height: 22px;width: 295px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM2_6_a" style="margin-left: 12px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM2_3" style="margin-left: 399px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <input type="text" ng-model="icDiscObj.SchedM2_7" style="margin-left: 346px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM2_4" style="margin-left: 399px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <input type="text" ng-model="icDiscObj.SchedM2_8" style="margin-left: 346px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <!--M-3-->
+                            <input type="text" ng-model="icDiscObj.SchedM3_1" style="margin-left: 399px;margin-top: 23px;height: 22px;width: 160px;">
+                            <input type="text" ng-model="icDiscObj.SchedM3_5" style="margin-left: 346px;margin-top: 23px;height: 22px;width: 160px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM3_2" style="margin-left: 399px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <input type="text" ng-model="icDiscObj.SchedM3_6" style="margin-left: 346px;margin-top: 0px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM3_3_b" ng-change="UpdateFunc(651, icDiscObj.SchedM3_3_b)" style="margin-left: 303px;margin-top: 0px;height: 22px;width: 83px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM3_7_b" ng-change="UpdateFunc(658, icDiscObj.SchedM3_7_b)" style="margin-left: 399px;margin-top: 0px;height: 22px;width: 111px;" class="nonstatic">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM3_3_c" ng-change="UpdateFunc(652, icDiscObj.SchedM3_3_c)" style="margin-left: 102px;margin-top: 0px;height: 22px;width: 286px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM3_7_c" ng-change="UpdateFunc(659, icDiscObj.SchedM3_7_c)" style="margin-left: 210px;margin-top: 0px;height: 22px;width: 297px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM3_7_a" style="margin-left: 8px;margin-top: 1px;height: 22px;width: 160px;" readonly>
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM3_3_d" ng-change="UpdateFunc(653, icDiscObj.SchedM3_3_d)" style="margin-left: 102px;margin-top: 1px;height: 22px;width: 286px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM3_3_a" style="margin-left: 8px;margin-top: 1px;height: 22px;width: 160px;" >
+                            <input type="text" ng-model="icDiscObj.SchedM3_8" style="margin-left: 347px;margin-top: 1px;height: 22px;width: 160px;" >
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM3_4" style="margin-left: 399px;margin-top: -1px;height: 22px;width: 160px;" >
+                            <input type="text" ng-model="icDiscObj.SchedM3_9" style="margin-left: 346px;margin-top: -1px;height: 22px;width: 160px;" readonly>
+                            <br />
+                            <!--M4-->
+                            <input type="text" ng-model="icDiscObj.SchedM4_1" style="margin-left: 399px;margin-top: 24px;height: 22px;width: 160px;" readonly>
+                            <input type="text" ng-model="icDiscObj.SchedM4_6" style="margin-left: 346px;margin-top: 24px;height: 22px;width: 160px;" readonly>
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM4_2_b" ng-change="UpdateFunc(664, icDiscObj.SchedM4_2_b)" style="margin-left: 248px;margin-top: 0px;height: 22px;width: 138px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM4_7" style="margin-left: 519px;margin-top: 0px;height: 22px;width: 160px;" readonly>
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM4_2_c" ng-change="UpdateFunc(665, icDiscObj.SchedM4_2_c)" style="margin-left: 102px;margin-top: 0px;height: 22px;width: 286px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM4_2_a" style="margin-left: 7px;margin-top: 0px;height: 22px;width: 160px;" readonly>
+                            <input type="text" ng-model="icDiscObj.SchedM4_8_b" ng-change="UpdateFunc(672, icDiscObj.SchedM4_8_b)" style="margin-left: 224px;margin-top: 0px;height: 22px;width: 110px;" class="nonstatic">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM4_3" style="margin-left: 399px;margin-top: 1px;height: 22px;width: 160px;" readonly>
+                            <input type="text" ng-model="icDiscObj.SchedM4_8_c" ng-change="UpdateFunc(673, icDiscObj.SchedM4_8_c)" style="margin-left: 36px;margin-top: -1px;height: 22px;width: 296px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedM4_8_a" style="margin-left: 11px;margin-top: -1px;height: 22px;width: 160px;" readonly>
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM4_4" style="margin-left: 399px;margin-top: 0px;height: 22px;width: 160px;" readonly>
+                            <input type="text" ng-model="icDiscObj.SchedM4_9" style="margin-left: 346px;margin-top: 0px;height: 22px;width: 160px;" readonly>
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedM4_5" style="margin-left: 399px;margin-top: 0px;height: 22px;width: 160px;" readonly>
+                            <input type="text" ng-model="icDiscObj.SchedM4_10" style="margin-left: 346px;margin-top: 0px;height: 22px;width: 160px;" readonly>
+                            <br />
+                            <!--page 6-->
+                            <input type="text" ng-model="icDiscObj.SchedN1a" ng-change="UpdateFunc(676, icDiscObj.SchedN1a)" style="margin-left: 198px;margin-top: 268px;height: 22px;width: 62px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedN1a_percentage" ng-change="UpdateFunc(677, icDiscObj.SchedN1a_percentage)" style="margin-left: 176px;margin-top: 268px;height: 22px;width: 62px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedN1b" ng-change="UpdateFunc(678, icDiscObj.SchedN1b)" style="margin-left: 208px;margin-top: 268px;height: 22px;width: 62px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedN1b_percentage" ng-change="UpdateFunc(679, icDiscObj.SchedN1b_percentage)" style="margin-left: 186px;margin-top: 268px;height: 22px;width: 62px;" class="nonstatic">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedN2a" ng-change="UpdateFunc(680, icDiscObj.SchedN2a)" style="margin-left: 63px;margin-top: 84px;height: 22px;width: 336px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedN2b" ng-change="UpdateFunc(681, icDiscObj.SchedN2b)" style="margin-left: -3px;margin-top: 84px;height: 22px;width: 335px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedN2c" ng-change="UpdateFunc(682, icDiscObj.SchedN2c)" style="margin-left: -3px;margin-top: 94px;height: 22px;width: 336px;" class="nonstatic">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedN3a" ng-change="UpdateFunc(683, icDiscObj.SchedN3a)" style="margin-left: 63px;margin-top: 90px;height: 22px;width: 336px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedN3b" ng-change="UpdateFunc(684, icDiscObj.SchedN3b)" style="margin-left: -3px;margin-top: 90px;height: 22px;width: 496px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedN3c" ng-change="UpdateFunc(685, icDiscObj.SchedN3c)" style="margin-left: -3px;margin-top: 90px;height: 22px;width: 174px;" class="nonstatic">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedN3d" ng-change="UpdateFunc(686, icDiscObj.SchedN3d)" style="margin-left: 63px;margin-top: 24px;height: 22px;width: 336px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedN3e" ng-change="UpdateFunc(687, icDiscObj.SchedN3e)" style="margin-left: -3px;margin-top: 24px;height: 22px;width: 496px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedN3f" ng-change="UpdateFunc(688, icDiscObj.SchedN3f)" style="margin-left: -3px;margin-top: 24px;height: 22px;width: 174px;" class="nonstatic">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedN4a" ng-change="UpdateFunc(689, icDiscObj.SchedN4a)" style="margin-left: 63px;margin-top: 66px;height: 22px;width: 336px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedN4b" ng-change="UpdateFunc(690, icDiscObj.SchedN4b)" style="margin-left: -3px;margin-top: 66px;height: 22px;width: 496px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedN4c" ng-change="UpdateFunc(691, icDiscObj.SchedN4c)" style="margin-left: -4px;margin-top: 66px;height: 22px;width: 174px;" class="nonstatic">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedN4d" ng-change="UpdateFunc(692, icDiscObj.SchedN4d)" style="margin-left: 63px;margin-top: 24px;height: 22px;width: 336px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedN4e" ng-change="UpdateFunc(693, icDiscObj.SchedN4e)" style="margin-left: -3px;margin-top: 24px;height: 22px;width: 496px;" class="nonstatic">
+                            <input type="text" ng-model="icDiscObj.SchedN4f" ng-change="UpdateFunc(694, icDiscObj.SchedN4f)" style="margin-left: -3px;margin-top: 24px;height: 22px;width: 174px;" class="nonstatic">
+                            <br />
+                            <!--Sch O Questions-->
+
+                            <input type="text" ng-model="icDiscObj.SchedO1a" ng-change="UpdateFunc(695, icDiscObj.SchedO1a)" style="margin-left: 278px;margin-top: 24px;height: 22px;width: 244px;">
+                            <input type="text" ng-model="icDiscObj.SchedO1b" ng-change="UpdateFunc(696, icDiscObj.SchedO1b)" style="margin-left: 194px;margin-top: 66px;height: 22px;width: 256px;">
+                            <br />
+                            <input type="radio" ng-model="icDiscObj.SchedO2a_Yes1" ng-change="UpdateFuncForRadioButton(697,icDiscObj.SchedO2a_Yes,698)" ng-value="Yes" style="margin-left: 1005px;margin-top: 23px;height: 16px;width: 16px;">
+                            <input type="radio" ng-model="icDiscObj.SchedO2a_Yes" ng-change="UpdateFuncForRadioButton(697,icDiscObj.SchedO2a_Yes,698)" value="No" style="margin-left: 18px;height: 16px;width: 16px;">
+                            <br />
+                            <input type="radio" ng-model="icDiscObj.SchedO2b_Yes" ng-change="UpdateFuncForRadioButton(699,icDiscObj.SchedO2b_Yes,700)" value="Yes" style="margin-left: 1005px;margin-top: 18px;height: 16px;width: 16px;">
+                            <input type="radio" ng-model="icDiscObj.SchedO2b_Yes1" ng-change="UpdateFuncForRadioButton(699,icDiscObj.SchedO2b_Yes,700)" ng-value="No" style="margin-left: 18px;margin-top: 18px;height: 16px;width: 16px;">
+                            <br />
+                            <input type="radio" ng-model="icDiscObj.SchedO2c_Yes1" ng-change="UpdateFuncForRadioButton(701,icDiscObj.SchedO2c_Yes,702)" ng-value="Yes" style="margin-left: 1005px;margin-top: 10px;height: 16px;width: 16px;">
+                            <input type="radio" ng-model="icDiscObj.SchedO2c_Yes" ng-change="UpdateFuncForRadioButton(701,icDiscObj.SchedO2c_Yes,702)" value="No" style="margin-left: 18px;margin-top: 10px;height: 16px;width: 16px;">
+                            <br />
+                            <input type="radio" ng-model="icDiscObj.SchedO3_Yes" ng-change="UpdateFuncForRadioButton(703,icDiscObj.SchedO3_Yes,704)" value="Yes" style="margin-left: 1005px;margin-top: 5px;height: 16px;width: 16px;">
+                            <input type="radio" ng-model="icDiscObj.SchedO3_Yes1" ng-change="UpdateFuncForRadioButton(703,icDiscObj.SchedO3_Yes,704)" ng-value="No" style="margin-left: 18px;margin-top: 5px;height: 16px;width: 16px;">
+                            <br />
+                            <input type="radio" ng-model="icDiscObj.SchedO4_Yes1" ng-change="UpdateFuncForRadioButton(705,icDiscObj.SchedO4_Yes,706)" ng-value="Yes" style="margin-left: 1005px;margin-top: 14px;height: 16px;width: 16px;">
+                            <input type="radio" ng-model="icDiscObj.SchedO4_Yes" ng-change="UpdateFuncForRadioButton(705,icDiscObj.SchedO4_Yes,706)" value="No" style="margin-left: 18px;margin-top: 14px;height: 16px;width: 16px;">
+                            <br />
+                            <input type="radio" ng-model="icDiscObj.SchedO5_Yes" ng-change="UpdateFuncForRadioButton(707,icDiscObj.SchedO5_Yes,708)" value="Yes" style="margin-left: 1005px;height: 16px;width: 16px;">
+                            <input type="radio" ng-model="icDiscObj.SchedO5_Yes1" ng-change="UpdateFuncForRadioButton(707,icDiscObj.SchedO5_Yes,708)" ng-value="No" style="margin-left: 18px;margin-top: 11px;height: 16px;width: 16px;">
+                            <br />
+                            <input type="radio" ng-model="icDiscObj.SchedO6a_Yes" ng-change="UpdateFuncForRadioButton(709,icDiscObj.SchedO6a_Yes,710)" value="Yes" style="margin-left: 1005px;margin-top: 47px;height: 16px;width: 16px;">
+                            <input type="radio" ng-model="icDiscObj.SchedO6a_Yes1" ng-change="UpdateFuncForRadioButton(709,icDiscObj.SchedO6a_Yes,710)" ng-value="No" style="margin-left: 18px;margin-top: 47px;height: 16px;width: 16px;">
+                            <br />
+                            <input type="radio" ng-model="icDiscObj.SchedO6b_Yes1" ng-change="UpdateFuncForRadioButton(711,icDiscObj.SchedO6b_Yes,712)" ng-value="Yes" style="margin-left: 1005px;margin-top: 48px;height: 16px;width: 16px;">
+                            <input type="radio" ng-model="icDiscObj.SchedO6b_Yes" ng-change="UpdateFuncForRadioButton(711,icDiscObj.SchedO6b_Yes,712)" value="No" style="margin-left: 18px;margin-top: 48px;height: 16px;width: 16px;">
+                            <br />
+                            <input type="radio" ng-model="icDiscObj.SchedO6c_Yes" ng-change="UpdateFuncForRadioButton(713,icDiscObj.SchedO6c_Yes,714)" value="Yes" style="margin-left: 1005px;margin-top: 48px;height: 16px;width: 16px;">
+                            <input type="radio" ng-model="icDiscObj.SchedO6c_Yes1" ng-change="UpdateFuncForRadioButton(713,icDiscObj.SchedO6c_Yes,714)" ng-value="No" style="margin-left: 18px;margin-top: 48px;height: 16px;width: 16px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedO7_Amt" ng-change="UpdateFunc(715, icDiscObj.SchedO7_Amt)" style="margin-left: 813px;margin-top: 66px;height: 22px;width: 167px;">
+                            <br />
+                            <input type="radio" ng-model="icDiscObj.SchedO8b_Yes1" ng-change="UpdateFuncForRadioButton(719,icDiscObj.SchedO8b_Yes,720)" ng-value="Yes" style="margin-left: 1005px;height: 16px;width: 16px;">
+                            <input type="radio" ng-model="icDiscObj.SchedO8b_Yes" ng-change="UpdateFuncForRadioButton(719,icDiscObj.SchedO8b_Yes,720)" value="No" style="margin-left: 18px;margin-top: 45px;height: 16px;width: 16px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedO8b_a" ng-change="UpdateFunc(716, icDiscObj.SchedO8b_a)" style="margin-left: 425px;margin-top: 0px;height: 22px;width: 244px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedO8b_b" ng-change="UpdateFunc(717, icDiscObj.SchedO8b_b)" style="margin-left: 410px;margin-top: 0px;height: 22px;width: 259px;">
+                            <br />
+                            <input type="text" ng-model="icDiscObj.SchedO8b_c" ng-change="UpdateFunc(718, icDiscObj.SchedO8b_c)" style="margin-left: 987px;margin-top: 23px;height: 22px;width: 85px;">
+                        </div>
+                                    </div>
+                    <span class="btn1">
+                        <input type="button" class="btn lg btn-s button-add" style="height:34px !important"; ng-disabled="isAlwaysDisabled" ng-click="SavePdfToDB()" value="Save" />
+                        <input type="button" class="btn lg btn-f button-add" style="margin-left: 200px;" value="Download" ng-click="downloadpdf1120()" />
+                    </span>
+</uib-tab>
+
+                
+            </uib-tabset>
+        </div>
+    </div>
+</div>
+

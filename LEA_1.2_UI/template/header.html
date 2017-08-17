@@ -1,0 +1,156 @@
+﻿<div   class=" page-header-inner col-md-12 col-lg-12 col-sm-12 col-xs-12 ">
+   <!-- {{ lname  +   "   ,  "   +  fname }} -->
+        <div class="navbar navbar-inner navbar-fixed-top header-one">
+            <div class="continer-padding-fistheader text-center ">
+                <div class="col-1g-4 col-md-4 col-sm-12 col-xs-12 ">
+
+                    <div class="navbar-header" ng-show="headerDisplay"> <!--Temp Code-->
+
+                        <a class="navbar-brand" href="#/">
+                            <!-- <span class="title font-color-header">Welcome! {{userName}}</span>-->
+                           <span class="title font-color-header">Welcome! <span>{{username}} </span></span> 
+                        </a>
+                    
+
+                    </div>
+                </div>
+                <div class="col-1g-6 col-md-6 col-sm-12 col-xs-12"></div>
+                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 " ng-show="headerDisplay"><!--Temp Code-->
+
+                    <a class="navbar-brand"><img alt="" class="img-circle" src="../images/profile-1.png" /></a>
+                    <a class="navbar-brand" ng-href="/"><img style="margin-top:5px;" src="../images/logout.png" ng-click="logout()" /></a>
+
+                </div>
+            </div>
+    
+        <div class="navbar navbar-default navbar-fixed-top second-navbar">
+            <div class="header-image">
+                <div class="continer-padding-headertwo">
+
+                    <div class="navbar-header" style="margin-top:15px;">
+
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+
+                        <a class="navbar-brand log-img" href="#/Dashboard" ><img style="margin-top:6px;" src="../images/logo_2.png" alt="logo" class="logo-default" /></a>
+                    </div>
+
+
+                    <div class="collapse navbar-collapse">
+
+
+                        <ul class="nav nav-pills navbar-right top_bottom" ng-show="headerDisplay"><!--Temp Code-->
+
+                            <!--<li ng-show="dashboard" class="active DB_hover_active">
+                                <a ng-href="#/">
+                                    <div class="menu"></div>
+                                    <span> Dashboard</span>
+                                </a>
+                            </li>
+                            <li ng-hide="dashboard" ng-click="showdashboard()" class="DB_hover">
+                                <a ng-href="#/">
+                                    <div class="menu"></div>
+                                    <span> Dashboard</span>
+                                </a>
+                            </li>-->
+                            <li ng-show="legalEntity" class="active LE_hover_active">
+                                <a ng-href="#/Dashboard">
+                                    <div class="menu"></div>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                            <li ng-hide="legalEntity" ng-click="showLegalEntity()" class="LE_hover">
+                                <a ng-href="#/Dashboard">
+                                    <div class="menu"></div>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                            <li ng-show="hfmUnit" class="active HU_hover_active">
+                                <a ng-href="#/HFMUnit">
+                                    <div class="menu"></div> <span>Business Unit</span>
+                                </a>
+                            </li>
+                            <li ng-hide="hfmUnit" ng-click="showHFMUnit()" class="HU_hover">
+                                <a ng-href="#/HFMUnit">
+                                    <div class="menu"></div> <span>Business Unit</span>
+                                </a>
+                            </li>
+                            <li ng-show="taxWorkbook" class="active TW_hover_active">
+                                <a ng-href="#/taxWorkbook">
+                                    <div class="menu"></div><span>Tax Workbook</span>
+                                </a>
+                            </li>
+                            <li ng-hide="taxWorkbook" ng-click="showtexWorkbook()" class="TW_hover">
+                                <a ng-href="#/taxWorkbook">
+
+                                    <div class="menu"></div><span>Tax Workbook</span>
+                                </a>
+                            </li>
+                            <li ng-show="timeLine" class="active TL_hover_active">
+                                <a ng-href="#/Timeline">
+                                    <div class="menu"></div><span>Timeline</span>
+                                </a>
+                            </li>
+                            <li ng-hide="timeLine" ng-click="showtimeLine()" class="TL_hover">
+                                <a ng-href="#/Timeline">
+
+                                    <div class="menu"></div><span>Timeline</span>
+                                </a>
+                            </li>
+                            <li ng-show="reports" class="active RE_hover_active">
+                                <a ng-href="#/Reports">
+                                    <div class="menu"></div><span>Reports</span>
+                                </a>
+                            </li>
+
+                            <li ng-hide="reports" ng-click="showreports()" class="RE_hover">
+                                <a ng-href="#/Reports">
+                                    <div class="menu"></div><span>Reports</span>
+                                </a>
+                            </li>
+
+
+                        <!--TaxReturn Compliance-->
+
+                            <li ng-show="taxreturn" class="active TX_hover_active">
+                                <a ng-href="#/TaxReturn">
+                                    <div class="menu"></div><span>Tax Return</span>
+                                </a>
+                            </li>
+
+                            <li ng-hide="taxreturn" ng-click="showtaxreturncomp()" class="TX_hover">
+                                <a ng-href="#/TaxReturn">
+                                    <div class="menu"></div><span>Tax Return</span>
+                                </a>
+                            </li>
+                            <!--Administration-->
+                            
+                            <li ng-show="admin" class="active AD_hover_active" ng-if="UserType=='ADMIN'">
+                                <a ng-href="#/Administration">
+                                    <div class="menu"></div><span>Administration</span>
+                                </a>
+                            </li>
+                        
+                            <li ng-hide="admin" ng-click="showlistofusers()" class="AD_hover" ng-if="UserType=='ADMIN'">
+                                <a ng-href="#/Administration">
+                                    <div class="menu"></div><span>Adminstration</span>
+                                </a>
+                            </li>
+                            <!--Administration-->
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+
+                    </div>
+                </div>
+    </div>
+</div>
+    

@@ -1,0 +1,40 @@
+﻿<style>
+    body{
+        overflow:auto!important;
+    }
+</style>
+<div ng-controller="HierarchyController" ng-init="init()">
+    <script type="text/ng-template" id="myPopoverTemplate.html">
+        <table id="popuptable">
+            <thead></thead>
+            <tbody>
+                <tr><td class="popuplabel text-right pad-top ">LE Name:</td><td class="text-left pad-top popupval"> {{Popover.title}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top ">LE Status:</td><td class="text-left pad-top popupval"> {{Popover.leStatus}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top">Type:</td><td class="popupval text-left pad-top"> {{Popover.leType}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top">Jurisdiction:</td><td class="popupval text-left pad-top"> {{Popover.leJurisdiction}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top">Date Incorporated:</td><td class="popupval text-left pad-top"> {{Popover.incorporatedDate}}</td></tr>
+            </tbody>
+        </table>
+
+    </script>
+    <div ng-controller="PrimitiveController" style="background-color:#fff">
+        <div class="row pad-botm margin-right-10" id="topbar">
+            
+            <img ng-click='zoomToFit()' class=" pull-right" title="zoom to fit" src="../images/root.png" style="cursor:pointer;height: 35px; width: 35px;" />
+            <img ng-click='print2()' class=" pull-right" title="print hierarchy" src="../images/print.png" style="cursor:pointer;height: 35px; width: 35px;" />
+
+
+        </div>
+        <div style="position:relative;overflow:auto">
+            <panzoomwidget panzoom-id="PanZoom" style="position:absolute;top:10px;left:10px;z-index:1"></panzoomwidget>
+            <panzoom id="PanZoom" config="panzoomConfig" model="panzoomModel" style="width:100%;height:400px;overflow:auto!important;cursor:default!important;">
+                <div bp-fam-diagram data-options="myOptions" data-on-highlight-changed="onMyHighlightChanged()" id="hierarchy" data-on-cursor-changed="onMyCursorChanged()">
+
+                </div>
+            </panzoom>
+        </div>
+       
+
+    </div>
+
+</div>

@@ -1,0 +1,297 @@
+﻿<div ng-controller="TimelineController as showCase" ng-init="init()">
+
+
+    <div class="continer-padding-fistheader  view-background">
+
+
+        <div class="hell">
+            <div class="caption">
+                <span class="font-color">Timeline</span>
+            </div>
+
+        </div>
+
+        <div class="row pad-top light-pad-sides">
+            <div class="col-md-12 col-xs-12">
+                <uib-tabset >
+                    
+                    <uib-tab heading="LEGAL ENTITY" select="initdtInstancetaxWorkbook()">
+                        <div class=" row portlet-body ">
+                            <div class="col-lg-12 col-md-12  col-xs-12 col-xs-12 ">
+                                <div class="table-toolbar  ">
+                                    <div class="row">
+                                        <div class="col-md-2 "></div>
+                                        <div class="alert alert-success alert-dismissible col-md-6" role="alert" ng-if="LEsuc">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4> {{LESuccess}}</h4>
+                                        </div>
+                                    </div>
+
+                                    <div class="row pad-row-top">
+                                        <div class="col-md-1 col-xs-1  pad-top">
+                                            <label class="control-label pull-right pad-top">LE Name:</label>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2  form-group-new pad-top">
+                                            <div class="input-group " id="le">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-search font-red"></i>
+                                                </span>
+
+                                                <input type="text" ng-model="levalue" uib-typeahead="obj as obj.lE_Name for obj in ledropdown | filter:$viewValue | limitTo:100" typeahead-on-select="loadperiodData1($item, $model, $label, $event)" placeholder=" Search..." class="form-control" id="lein">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 col-xs-1  pad-top" style=" padding-right 0;">
+                                            <label class="control-label pull-right pad-top">Start Date:</label>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2  form-group-new pad-top">
+
+
+                                            <div class="input-group form-group-new" id="startgroup">
+                                                <input id="start_date" name="Start_date" type="Start_Dt" show-weeks="false" show-button-bar="false" class="form-control" ng-readonly="readonly" ng-model="strStart_Dt" uib-datepicker-popup="{{format}}" ng-model="dt1" is-open="isOpened1" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" required />
+                                                <p ng-show="myForm.Incorporated_Dt.$invalid && !myForm.Incorporated_Dt.$pristine" class="help-block">Start Date is required.</p>
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn " ng-click="isOpened1 = !isOpened1"><i class="fa fa-calendar font-red"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 col-xs-1  pad-top" style=" padding-right 0;">
+                                            <label class="control-label pull-right pad-top">End Date:</label>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2  form-group-new pad-top">
+                                            <div class="input-group form-group-new" id="endgroup">
+                                                <input id="end_date" name="end_date" type="end_Dt" class="form-control" ng-readonly="readonly" ng-model="strEnd_Dt" uib-datepicker-popup="{{format}}" ng-model="dt2" is-open="isOpened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" show-weeks="false" show-button-bar="false" ng-required="true" close-text="Close" required />
+                                                <p ng-show="myForm.Incorporated_Dt.$invalid && !myForm.Incorporated_Dt.$pristine" class="help-block">End Date is required.</p>
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn " ng-click="isOpened = !isOpened"><i class="fa fa-calendar font-red"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2  form-group-new pad-top" style="    margin-left: 35px;">
+                                            <button type="button" class="btn btn-primary" ng-click="showTimeLine(levalue,multipleDemo.colors,2)">Show Timeline</button>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div id="exportable" class="row">
+                                        <div class="col-md-12 col-xs-12 ">
+                                            <div fixed-first-column >
+                                                <table id="letable" class="table table-striped table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th ng-repeat="head in tableheader" ng-style="{'background-color': head.color}">{{head.header}}</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+
+                                                            <td  ng-repeat="le in LEN">{{le.Lname}}</td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td  ng-repeat="ls in LES">{{ls.Lstatus}}</td>
+                                                        </tr>
+                                                        <tr>
+
+                                                            <td  ng-repeat="Ljd in JD">
+                                                                <div  ng-if="Ljd.LJD==='Jurisdiction'">
+                                                                    {{Ljd.LJD}}
+                                                                </div>
+                                                                <div  ng-if="!(Ljd.LJD==='Jurisdiction')">
+                                                                    
+                                                                    <div class="flag flag-{{Ljd.code| lowercase }}" style="    margin-top: 3px;"></div>
+                                                                        {{Ljd.LJD}}
+                                                                    </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td  ng-repeat="let in ET">{{let.LET}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td  ng-repeat="lgt in GT">{{lgt.LGT}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td  ng-repeat="adr in Adr">{{adr.Adress}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td  ng-repeat="lcm in LC"><p title="{{lcm.LCM}}">{{lcm.LCM | limitTo: 20}}</p></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td  ng-repeat="lub in UPB">{{lub.LUB}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td  ng-repeat="lud in UPD">{{lud.LUD}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td ng-repeat="los in Ownsh">
+
+                                                                <div  ng-if="los.LOS==='Ownership'">
+
+                                                                    {{los.LOS}}
+                                                                </div>
+                                                                <ul ng-if="!(los.LOS==='Ownership')">
+                                                                    <li  ng-repeat="l in los.LOS ">{{l.le_parent_name}}({{l.ownership}})</li>
+                                                                </ul>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td  ng-repeat="lhfm in HFMR">
+
+                                                                <div ng-if="lhfm.LHFM==='Business Unit Reporting'">
+
+                                                                    {{lhfm.LHFM}}
+                                                                </div>
+                                                                <ul ng-if="!(lhfm.LHFM==='Business Unit Reporting')">
+                                                                    <li ng-repeat="lhf in lhfm.LHFM ">{{lhf.hfm_label}}</li>
+                                                                </ul>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </uib-tab>
+
+                    <uib-tab heading="BUSINESS UNIT" select="initdtInstanceHFMUnit()">
+                        <div class=" row portlet-body ">
+
+                            <div class="col-lg-12 col-md-12  col-xs-12 col-xs-12 ">
+                                <div class="table-toolbar  ">
+                                    <div class="row">
+                                        <div class="col-md-2 "></div>
+                                        <div class="alert alert-success alert-dismissible col-md-6" role="alert" ng-if="suc">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4> {{Success}}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="row pad-row-top">
+
+                                        <div class="col-md-1 col-xs-1  pad-top" style="width:170px">
+                                            <label class="control-label pull-right pad-top">Business Unit Name:</label>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2  form-group-new pad-top">
+                                            <div class="input-group " id="hfm">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-industry font-red"></i>
+                                                </span>
+                                                <input type="text" ng-model="Hfmdata" uib-typeahead="obj as obj.hfm_label for obj in HFMdropdown | filter:$viewValue | limitTo:100" typeahead-on-select="loadperiodData2($item, $model, $label, $event)" placeholder=" Search..." class="form-control" id="hfmin">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 col-xs-1  pad-top" style=" padding-right 0;">
+                                            <label class="control-label pull-right pad-top">Start Date:</label>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2  form-group-new pad-top">
+
+
+                                            <div class="input-group form-group-new" id="starthfmgroup">
+                                                <input id="hfm_start_date" name="hfm_start_date" type="Start_Dt" show-weeks="false" show-button-bar="false" class="form-control" ng-readonly="readonly" ng-model="strHFMStart_Dt" uib-datepicker-popup="{{format}}" ng-model="dt2" is-open="isOpened2" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" required />
+                                                <p ng-show="myForm.Incorporated_Dt.$invalid && !myForm.Incorporated_Dt.$pristine" class="help-block">Start Date is required.</p>
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn " ng-click="isOpened2 = !isOpened2"><i class="fa fa-calendar font-red"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 col-xs-1  pad-top" style=" padding-right 0;">
+                                            <label class="control-label pull-right pad-top">End Date:</label>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2  form-group-new pad-top">
+                                            <div class="input-group form-group-new" id="endgroup">
+                                                <input id="hfm_end_date" name="hfm_end_date" type="end_Dt" class="form-control" ng-readonly="readonly" ng-model="strHFMEnd_Dt" uib-datepicker-popup="{{format}}" ng-model="dt3" is-open="isOpened3" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" show-weeks="false" show-button-bar="false" ng-required="true" close-text="Close" required />
+                                                <p ng-show="myForm.Incorporated_Dt.$invalid && !myForm.Incorporated_Dt.$pristine" class="help-block">End Date is required.</p>
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn " ng-click="isOpened3 = !isOpened3"><i class="fa fa-calendar font-red"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2  form-group-new pad-top" style="    margin-left: 35px;">
+                                            <button type="button" ng-click="showTimeLine(Hfmdata,hfmMultiplePeriod.color,1)" class="btn btn-primary">Show Timeline</button>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div id="exportable1" class="row">
+                                        <div class="col-md-12 col-xs-12 ">
+                                            <div fixed-first-column>
+                                                <table id="hfmtable" class="table table-striped table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th ng-repeat="head in hfmtableheader" ng-style="{'background-color': head.color}">{{head.hfmheader}}</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+
+                                                            <td ng-repeat="hfmn in HEN">{{hfmn.Hname}}</td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td ng-repeat="hfms in HS">{{hfms.Hsegement}}</td>
+                                                        </tr>
+                                                        <tr>
+
+                                                            <td ng-repeat="hfmjd in HJD">
+                                                                <div ng-if="hfmjd.HJD==='Jurisdiction'">
+                                                                    {{hfmjd.HJD}}
+                                                                </div>
+                                                                <div ng-if="!(hfmjd.HJD==='Jurisdiction')">
+                                                                    <div class="flag flag-{{hfmjd.code| lowercase }}" style="    margin-top: 3px;"></div>
+                                                                    {{hfmjd.HJD}}
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td ng-repeat="hfmc in HC">{{hfmc.HFC}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td ng-repeat="hfmerp in ERP">{{hfmerp.HERP}}</td>
+                                                        </tr>
+
+
+                                                        <tr>
+                                                            <td ng-repeat="hfmcm in HLC">{{hfmcm.HCM}}</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td ng-repeat="hfmub in HUPB">{{hfmub.HLUB}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td ng-repeat="hfmud in HUPD">{{hfmud.HFLUD}}</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td ng-repeat="hfmwb in HFMW ">
+
+                                                                <div ng-if="hfmwb.HFMWOB==='Business Unit Workbooks'">
+
+                                                                    {{hfmwb.HFMWOB}}
+                                                                </div>
+                                                                <ul ng-if="!(hfmwb.HFMWOB==='hfmworkbook')">
+                                                                    <li ng-repeat="hf in hfmwb.HFMWOB ">{{hf.workbook_num}}</li>
+                                                                </ul>
+                                                            </td>
+                                                        </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>      
+    </div>
+</div>

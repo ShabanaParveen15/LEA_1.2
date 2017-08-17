@@ -1,0 +1,109 @@
+﻿<div ng-controller="ReportsController as showCase" ng-init="init()">
+
+
+    <div class="continer-padding-fistheader  view-background">
+
+
+        <div class="hell">
+            <div class="caption">
+                <span class="font-color">
+                    CHANGE LOG REPORT
+                </span>
+            </div>
+
+        </div>
+
+        <div class="row pad-top light-pad-sides">
+            <div class="col-md-12 col-xs-12">
+                <div class="row pad-row-top">
+                    <div class="col-md-1 col-xs-1  pad-top" style=" padding-right: 0;">
+                        <label class="control-label pull-right pad-top">Start Date:</label>
+                    </div>
+                    <div class="col-md-2 col-xs-2  form-group-new pad-top">
+                      
+                            
+                            <div class="input-group form-group-new" id="startgroup">
+                                <input id="start_date" name="Start_date" type="Start_Dt" show-weeks="false" show-button-bar="false"  class="form-control" ng-readonly="readonly" ng-model="strStart_Dt" uib-datepicker-popup="{{format}}" ng-model="dt1" is-open="isOpened1" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" required />
+                                <p ng-show="myForm.Incorporated_Dt.$invalid && !myForm.Incorporated_Dt.$pristine" class="help-block">Start Date is required.</p>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn " ng-click="isOpened1 = !isOpened1"><i class="fa fa-calendar font-red"></i></button>
+                                </span>
+                            </div>
+                    </div>
+                    <div class="col-md-1 col-xs-1  pad-top" style=" padding-right: 0;">
+                        <label class="control-label pull-right pad-top">End Date:</label>
+                    </div>
+                    <div class="col-md-2 col-xs-2  form-group-new pad-top">
+                        <div class="input-group form-group-new" id="endgroup">
+                            <input id="end_date" name="end_date" type="end_Dt" class="form-control" ng-readonly="readonly" ng-model="strEnd_Dt" uib-datepicker-popup="{{format}}" ng-model="dt2" is-open="isOpened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" show-weeks="false" show-button-bar="false"  ng-required="true" close-text="Close" required />
+                            <p ng-show="myForm.Incorporated_Dt.$invalid && !myForm.Incorporated_Dt.$pristine" class="help-block">End Date is required.</p>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn " ng-click="isOpened = !isOpened"><i class="fa fa-calendar font-red"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-xs-3 form-group-new pad-top" style="padding-right:0">
+                        <div class="input-group pad-right">
+                            <span class="input-group-addon">
+                                <i class="fa fa-table font-red"></i>
+                            </span>
+                            <select class="form-control ng-pristine ng-valid ng-valid-required ng-touched" id="reporttype" required="">
+                                <option value="0" selected="selected">Legal Entity Change log Report</option>
+                                <option value="1" >Business Unit Change Log Report </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-xs-2  form-group-new pad-top">
+                        <button type="button" class="btn btn-primary" ng-click="runReport()">Run Reports</button>
+
+                    </div>
+
+
+
+
+                </div>
+                <div class=" row portlet-body pad-top" ng-show="viewle">
+                    <div class="col-lg-12 col-md-12  col-xs-12 col-xs-12 ">
+                        <div class="col-lg-12 col-md-12  col-xs-12 col-xs-12 ">
+
+                            <h4 class="font-color-sub tableheader">New Legal Entities</h4>
+
+                            <div id="exportable3" class="pad-row-top">
+                                <table datatable dt-options="dtOptions3" dt-columns="dtColumns3" dt-instance="dtInstance3" class="table table-striped table-hover table-bordered repeat-animation fullwidth"></table>
+                            </div>
+                            <div class="margin-top-65">
+                                <h4 class="font-color-sub tableheader">Updated Legal Entities</h4>
+
+                                <div id="exportable4" class="pad-row-top">
+                                    <table datatable dt-options="dtOptions4" dt-columns="dtColumns4" dt-instance="dtInstance4" class="table table-striped table-hover table-bordered repeat-animation fullwidth"></table>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="row portlet-body pad-top" ng-show="viewhfm">
+                    <div class="col-lg-12 col-md-12  col-xs-12 col-xs-12 ">
+                        <div class="col-lg-12 col-md-12  col-xs-12 col-xs-12 ">
+
+                            <h4 class="font-color-sub tableheader">New Buisness Units</h4>
+                            <div id="exportable" class="pad-row-top">
+                                <table datatable dt-options="dtOptions" dt-columns="dtColumns" dt-instance="dtInstance" class="table table-striped table-hover table-bordered repeat-animation" style="width:100%"></table>
+                            </div>
+                            <div class="margin-top-65">
+                                <h4 class="font-color-sub tableheader">Updated HFM Units</h4>
+
+                                <div id="exportable2" class="pad-row-top ">
+                                    <table datatable dt-options="dtOptions2" dt-columns="dtColumns2" dt-instance="dtInstance2" class="table table-striped table-hover table-bordered repeat-animation" style="width:100%"></table>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

@@ -1,0 +1,68 @@
+﻿<div ng-controller="WithTableToolsCtrl as showCase" ng-init="init()">
+    <script type="text/ng-template" id="myPopoverTemplate.html">
+        <table id="popuptable">
+            <thead></thead>
+            <tbody>
+                <tr><td class="popuplabel text-right pad-top ">LE Name:</td><td class="text-left pad-top popupval"> {{Popover.title}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top ">LE Status:</td><td class="text-left pad-top popupval"> {{Popover.leStatus}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top">Type:</td><td class="popupval text-left pad-top"> {{Popover.leType}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top">Jurisdiction:</td><td class="popupval text-left pad-top"> {{Popover.leJurisdiction}}</td></tr>
+                <tr><td class="popuplabel text-right pad-top">Date Incorporated:</td><td class="popupval text-left pad-top"> {{Popover.incorporatedDate}}</td></tr>
+            </tbody>
+        </table>
+
+    </script>
+    
+    <div class="continer-padding-fistheader  view-background">
+        <div class="hell">
+            <div class="caption">
+                <span class="font-color">
+                    DASHBOARD
+                </span>
+                <div class="dropdown pull-right " style="    width: 140px;
+    padding-right: 0;">
+                <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-clock-o font-red"></i>
+                        </span>
+                        <select class="input-block-level repeat-animation form-control" ng-model="periodvalue" ng-change="changeData(periodvalue)" ng-options="obj.description for obj in periodData |orderBy: '-description'"></select>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class=" row portlet-body boder-table ">
+            <div class="col-lg-12 col-md-12  col-xs-12 col-xs-12 ">
+                <div class="table-toolbar boarder-box ">
+                    <div class="row">
+
+                        <div class="col-md-2 ADD_btn">
+                            <div class="btn-group">
+                                <button ng-show="role" id="sample_editable_1_new" class="btn button-add" ng-click="addNew()">
+                                    Add New <i class="fa fa-plus">
+                                    </i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <div class=" pull-right">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="exportable">
+                    <table datatable dt-options="dtOptions" dt-columns="dtColumns" dt-instance="dtInstance" class="table table-striped table-hover table-bordered repeat-animation"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+      
+           
+   
+
+

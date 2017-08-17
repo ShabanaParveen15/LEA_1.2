@@ -1,0 +1,154 @@
+﻿<link href="vendor/wijmo/styles/app.css" rel="stylesheet" />
+<div ng-controller="SchedulePController">
+    <div exportalheader layout="common"></div>
+
+   
+    <div id="loader" hidden><h2 class="ajax-loader">Loading... </h2></div>
+    <div class="view-fixer" ng-init="init()" id="views">
+
+        <div class="container-fluid excelbook" id="view-edit">
+            <div class="page-heading">
+                FORM 1120 IC-DISC SCHEDULE P
+            </div>
+            <div class="whitepanel col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="margin-top">
+
+
+                    <div class="MyModel">
+                       
+                        <div class="modal-body">
+                            <div class="row margin-top-20 animate left-right-padding" ng-if="savesuccess">
+                                <uib-alert type="success">Saved Successfully</uib-alert>
+                            </div>
+                            <uib-tabset active="tabactive">
+                                <uib-tab heading="PDF PREVIEW" style="outline:none" select="ShowPDF()" disable="disable">
+                                    
+                                    <input type="button" class="btn lg btn-s ng-scope" value="Download" ng-click="PrintElem('#mydiv')" />
+                                    <div id="mydiv">
+                                        <img class="xt-pdf-Images" src="images/Form1120_IC_DISC_ScheduleP_1.png"><br />
+                                        <img class="xt-pdf-Images" src="images/Form1120_IC_DISC_ScheduleP_2.png"><br />
+                                        <div id="example">
+                                           
+                                            <input type="text" style="margin-left: 421px;margin-top: 110px;height: 18px;width: 21px;">
+                                            <input type="text" style="margin-left: 140px;margin-top: 110px;height: 18px;width: 79px;">
+                                            <input type="text" style="margin-left: 20px;margin-top: 110px;height: 18px;width: 22px;">
+                                            <input type="text" style="margin-left: 71px;margin-top: 110px;height: 18px;width: 74px;">
+                                            <input type="text" style="margin-left: 23px;margin-top: 110px;height: 18px;width: 19px;">
+                                            <br>
+                                            <input type="text" style="margin-left: 480px;margin-top: 5px;height: 18px;width: 79px;">
+                                            <input type="text" style="margin-left: 78px;margin-top: 5px;height: 18px;width: 79px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 83px;margin-top: 28px;height: 18px;width: 700px;">
+                                            <input type="text" style="margin-left: 11px;margin-top: 0px;height: 18px;width: 51px;">
+                                            <input type="text" style="margin-left: 5px;margin-top: 0px;height: 18px;width: 175px;">
+                                            <br/>
+                                            <input type="checkbox" style="height: 25px;width: 16px;margin-left: 1050px;margin-top: 23px;opacity:inherit;">
+                                            <input type="checkbox" style="height: 25px;width: 16px;margin-left: 1050px;margin-top: -3px;opacity:inherit;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 947px;margin-top: 68px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 786px;margin-top: 27px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 786px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 786px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 786px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 29px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 786px;margin-top: 27px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 786px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 786px;margin-top: 4px;height: 41px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 41px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 41px;width: 118px;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 786px;margin-top: 49px;height: 18px;width: 118px;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 786px;margin-top: 5px;height: 18px;width: 118px;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br/>
+                                            <input type="checkbox" style="height: 25px;width: 16px;margin-left: 876px;margin-top: 27px;opacity:inherit;">
+                                            <input type="text" style="margin-left: 55px;margin-top: 5px;height: 41px;width: 102px;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 947px;margin-top: 0px;height: 18px;width: 118px;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 947px;margin-top: 3px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 27px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 3px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 42px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 27px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 5px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="checkbox" style="height: 25px;width: 16px;margin-left: 332px;margin-top: 27px;opacity:inherit;">
+                                            <input type="text" style="margin-left: 599px;margin-top: 4px;height: 42px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 0px;height: 18px;width: 118px;">
+
+                                            <br/>
+                                            <input type="text" style="margin-left: 947px;margin-top: 247px;height: 18px;width: 118px;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 786px;margin-top: 27px;height: 18px;width: 118px;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 786px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 786px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 947px;margin-top: 27px;height: 18px;width: 118px;">
+                                            <br/>
+                                            <input type="text" style="margin-left: 947px;margin-top: 6px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 18px;width: 118px;">
+                                            <br />
+                                            <input type="text" style="margin-left: 947px;margin-top: 4px;height: 18px;width: 118px;">
+                                        </div>
+                                    </div>
+
+                                </uib-tab>
+                                
+                               
+
+                            </uib-tabset>
+                        </div>
+                    </div>
+                  
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

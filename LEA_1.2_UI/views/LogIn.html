@@ -1,0 +1,49 @@
+﻿<meta name="viewport" content="width=device-width, initial-scale=1" />
+<div ng-controller="LogInController">
+    <div class="main-login">
+        <div class="header1"></div>
+        <div class="center1">
+            <div class="logo1"><img src="images/logo.png" /></div>
+            <div class="center-bg1" ng-init="init()">
+                <div class="left1"><img src="images/Logo-big.png" /></div>
+                <div class="right1">
+                   
+<div class="coming-popup">
+<p class="login-hading1">Login here!</p>
+    <div class="com-popup1" ng-show="crederror">Enter Your Credentials</div>
+ </div>
+
+                    <div class="coming-popup">
+
+<div class="right1-size">
+<p class="com-popup" ng-show="loginerror"> {{error}}</p>
+</div>
+
+                            <p>
+                                <div class="icon11"><img src="images/icon1.png" /></div>
+                                <input ng-keyup="$event.keyCode == 13 && checkUser()" name=" txtname" class="login1" id="name" ng-readonly="isUserNameExist" placeholder="Username" data-ng-model="loginData.userName" size="250" maxlength="250" value="" type="text">
+                            </p>
+
+                            <p>
+                                <div class="icon31"><img src="images/icon2.png" ng-if="isUserNameExist" /></div>
+                                <input name="txtname" class="login1" autocomplete="off" ng-if="isUserNameExist" id="name" ng-keyup="keyupevent($event)" placeholder="Password" data-ng-model="loginData.password" size="250" maxlength="250" value="" type="password">
+                            </p>
+
+
+                            <!--<p class="alert alert-danger" ng-show="crederror"> Enter Your Credentials </p>-->
+
+
+                            <div class="button2" ng-show="usernamevalid" data-ng-click="login()"><p class="text-h11">Submit</p></div>
+                            <div class="button1" ng-hide="usernameinvalid" data-ng-click="checkUser()"><p class="text-h11">Next</p></div>
+
+                        </div>
+
+            </div>
+                </div>
+
+            <div class="shadow">
+                <img src="images/shadow1.png" />
+            </div>
+        </div>
+    </div>
+</div>
